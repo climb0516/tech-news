@@ -3,701 +3,735 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI & 技术动态</title>
+  <meta name="color-scheme" content="dark light">
+  <title>TechPulse · AI & 技术动态</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0d0d14;
-      --surface: #15151f;
-      --surface-hover: #1c1c2c;
-      --border: #22223a;
-      --border-hover: #38385a;
-      --text-1: #e2e2f0;
-      --text-2: #8080a8;
-      --text-3: #50506a;
-      --cat-a: #818cf8;
-      --cat-b: #22d3ee;
-      --cat-c: #34d399;
-      --cat-d: #fbbf24;
-      --cat-e: #f87171;
-      --tl-line: #22223a;
-      --tl-dot: #38385a;
+      --bg: #08080c;
+      --bg-2: #0e0e14;
+      --panel: rgba(22,22,30,0.72);
+      --panel-solid: #14141b;
+      --hover: rgba(255,255,255,0.04);
+      --line: rgba(255,255,255,0.07);
+      --line-2: rgba(255,255,255,0.12);
+      --text-1: #ededf2;
+      --text-2: #a0a0b0;
+      --text-3: #64647a;
+      --accent: #8b7cff;
+      --accent-2: #4cc9f0;
+      --grad: linear-gradient(120deg, #8b7cff 0%, #4cc9f0 100%);
+      --grid-dot: rgba(255,255,255,0.045);
+      --glow-1: rgba(139,124,255,0.18);
+      --glow-2: rgba(76,201,240,0.10);
+      --cat-A: #a78bfa;
+      --cat-B: #22d3ee;
+      --cat-C: #34d399;
+      --cat-D: #fbbf24;
+      --cat-E: #fb7185;
+      --shadow: 0 0 0 1px var(--line), 0 12px 32px rgba(0,0,0,0.35);
+      --kbd-bg: rgba(255,255,255,0.06);
+    }
+    :root[data-theme="light"] {
+      --bg: #fafafb;
+      --bg-2: #ffffff;
+      --panel: rgba(255,255,255,0.8);
+      --panel-solid: #ffffff;
+      --hover: rgba(10,10,30,0.035);
+      --line: rgba(10,10,30,0.08);
+      --line-2: rgba(10,10,30,0.14);
+      --text-1: #121218;
+      --text-2: #565668;
+      --text-3: #8e8ea2;
+      --accent: #6a55f5;
+      --accent-2: #0ea5c6;
+      --grad: linear-gradient(120deg, #6a55f5 0%, #0ea5c6 100%);
+      --grid-dot: rgba(10,10,30,0.06);
+      --glow-1: rgba(106,85,245,0.10);
+      --glow-2: rgba(14,165,198,0.07);
+      --cat-A: #7c3aed;
+      --cat-B: #0891b2;
+      --cat-C: #059669;
+      --cat-D: #b45309;
+      --cat-E: #e11d48;
+      --shadow: 0 0 0 1px var(--line), 0 10px 28px rgba(20,20,60,0.07);
+      --kbd-bg: rgba(10,10,30,0.05);
     }
 
+    html { scroll-behavior: smooth; }
     body {
       background: var(--bg);
       color: var(--text-1);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      line-height: 1.6;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
       min-height: 100vh;
     }
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(600px 400px at 15% -5%, var(--glow-1), transparent 70%),
+        radial-gradient(700px 500px at 95% 0%, var(--glow-2), transparent 70%),
+        radial-gradient(circle, var(--grid-dot) 1px, transparent 1px) 0 0 / 22px 22px;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; }
 
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    /* ── Top bar ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 30;
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      backdrop-filter: saturate(180%) blur(18px);
+      -webkit-backdrop-filter: saturate(180%) blur(18px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      max-width: 1320px; margin: 0 auto; padding: 0 24px;
+      height: 60px; display: flex; align-items: center; gap: 20px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; letter-spacing: -0.02em; white-space: nowrap; }
+    .logo-mark {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: var(--grad);
+      display: grid; place-items: center;
+      color: #fff; font-size: 15px;
+      box-shadow: 0 0 20px var(--glow-1);
+    }
+    .logo small { font-weight: 500; font-size: 12px; color: var(--text-3); letter-spacing: 0; }
+    .search {
+      flex: 1; max-width: 520px; margin: 0 auto;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 10px; padding: 0 10px; height: 36px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow-1); }
+    .search svg { color: var(--text-3); flex: none; }
+    .search input {
+      flex: 1; min-width: 0; background: none; border: none; outline: none;
+      color: var(--text-1); font: inherit; font-size: 13.5px;
+    }
+    .search input::placeholder { color: var(--text-3); }
+    kbd {
+      font-family: inherit; font-size: 11px; color: var(--text-3);
+      background: var(--kbd-bg); border: 1px solid var(--line);
+      border-radius: 5px; padding: 1px 6px;
+    }
+    .top-right { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+    .updated { font-size: 12px; color: var(--text-3); display: flex; align-items: center; gap: 6px; }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.2); animation: pulse 2s infinite; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); } }
+    .icon-btn {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: var(--panel); border: 1px solid var(--line);
+      cursor: pointer; display: grid; place-items: center; color: var(--text-2);
+    }
+    .icon-btn:hover { color: var(--text-1); border-color: var(--line-2); }
 
-    /* ── Header ── */
-    header {
-      padding: 28px 0 22px;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(99,102,241,0.07) 0%, transparent 100%);
+    /* ── Layout ── */
+    .layout {
+      max-width: 1320px; margin: 0 auto; padding: 24px 24px 64px;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr) 300px;
+      grid-template-areas: "side main rail";
+      gap: 28px;
+      align-items: start;
     }
-    .header-row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .site-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: linear-gradient(120deg, #818cf8 0%, #22d3ee 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .site-sub {
-      font-size: 0.82rem;
-      color: var(--text-2);
-      margin-top: 4px;
-    }
-    .updated-badge {
-      font-size: 0.75rem;
-      color: var(--text-3);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 4px 10px;
-      white-space: nowrap;
-      margin-top: 4px;
-    }
+    .side { grid-area: side; position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow-y: auto; scrollbar-width: none; }
+    .side::-webkit-scrollbar { display: none; }
+    .main { grid-area: main; min-width: 0; }
+    .rail { grid-area: rail; position: sticky; top: 84px; display: flex; flex-direction: column; gap: 16px; }
 
-    /* ── Sticky filter bar ── */
-    .filter-bar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(13,13,20,0.9);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 0;
+    /* ── Sidebar nav ── */
+    .nav-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); padding: 0 10px 8px; }
+    .nav-group + .nav-group { margin-top: 22px; }
+    .nav-list { display: flex; flex-direction: column; gap: 1px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 10px; border-radius: 8px;
+      background: none; border: none; cursor: pointer; text-align: left;
+      color: var(--text-2); font-size: 13.5px;
+      transition: background .12s, color .12s;
     }
-    .filter-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .filter-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .filter-pills {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .pill {
-      padding: 4px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-2);
-      font-size: 0.78rem;
-      cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
-    }
-    .pill:hover { border-color: var(--border-hover); color: var(--text-1); }
-    .pill.active { background: #312e81; border-color: var(--cat-a); color: #c7d2fe; }
+    .nav-item:hover { background: var(--hover); color: var(--text-1); }
+    .nav-item.active { background: var(--hover); color: var(--text-1); font-weight: 600; box-shadow: inset 2px 0 0 var(--accent); }
+    .nav-item .label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nav-item .cnt { font-size: 11.5px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+    .cat-dot { width: 8px; height: 8px; border-radius: 3px; flex: none; }
+    .nav-item .avatar { width: 20px; height: 20px; border-radius: 6px; font-size: 9px; }
+    .nav-clear { font-size: 11.5px; color: var(--accent); background: none; border: none; cursor: pointer; float: right; text-transform: none; letter-spacing: 0; font-weight: 500; }
 
-    /* ── View toggle ── */
-    .view-toggle {
-      display: flex;
-      gap: 2px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 3px;
-      flex-shrink: 0;
-    }
-    .view-btn {
-      padding: 4px 10px;
-      border-radius: 6px;
-      border: none;
-      background: transparent;
-      color: var(--text-3);
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .view-btn:hover { color: var(--text-2); }
-    .view-btn.active { background: var(--border-hover); color: var(--text-1); }
-
-    .filter-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .count-label {
-      font-size: 0.75rem;
-      color: var(--text-3);
-      white-space: nowrap;
+    /* ── Avatar（来源标识） ── */
+    .avatar {
+      flex: none; display: grid; place-items: center;
+      width: 36px; height: 36px; border-radius: 10px;
+      font-weight: 800; font-size: 12px; letter-spacing: -0.02em; color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
     }
 
-    /* ── Feed area ── */
-    .feed { padding: 24px 0 72px; }
+    /* ── Feed toolbar ── */
+    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .toolbar h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.025em; }
+    .toolbar h1 .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .toolbar .sub { font-size: 12.5px; color: var(--text-3); margin-top: 2px; }
+    .seg { display: flex; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; padding: 3px; gap: 2px; flex: none; }
+    .seg button {
+      border: none; background: none; cursor: pointer;
+      padding: 4px 10px; border-radius: 6px; font-size: 12.5px; color: var(--text-3);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .seg button.active { background: var(--line-2); color: var(--text-1); }
+
+    .chips { display: none; }
+
+    /* ── Post（信息流单条） ── */
+    .feed { display: flex; flex-direction: column; gap: 10px; }
+    .post {
+      display: flex; gap: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      position: relative;
+      transition: border-color .15s, transform .15s, background .15s;
+    }
+    .post:hover { border-color: var(--line-2); background: color-mix(in srgb, var(--panel-solid) 92%, var(--accent)); }
+    .post::after {
+      content: ''; position: absolute; inset: -1px; border-radius: 15px; pointer-events: none;
+      padding: 1px; background: var(--grad); opacity: 0; transition: opacity .2s;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+    }
+    .post:hover::after { opacity: 0.55; }
+    .post-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+    .post-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-3); }
+    .post-meta .src { color: var(--text-1); font-weight: 600; }
+    .post-meta .sep { opacity: .5; }
+    .tag {
+      font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px;
+      border: 1px solid currentColor; line-height: 1.6;
+      background: color-mix(in srgb, currentColor 10%, transparent);
+    }
+    .tag-ai { color: var(--accent); }
+    .post-title { font-size: 15.5px; font-weight: 650; line-height: 1.45; letter-spacing: -0.01em; color: var(--text-1); }
+    .post-title a::before { content: ''; position: absolute; inset: 0; border-radius: 14px; }
+    .post-summary {
+      font-size: 13.5px; color: var(--text-2); line-height: 1.6;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .post-actions { display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--text-3); margin-top: 2px; }
+    .post-actions .act { display: inline-flex; align-items: center; gap: 4px; position: relative; z-index: 1; background: none; border: none; cursor: pointer; color: inherit; }
+    .post-actions .act:hover { color: var(--text-1); }
+    .thumb {
+      flex: none; width: 132px; height: 92px; border-radius: 10px; object-fit: cover;
+      background: var(--line); border: 1px solid var(--line);
+    }
 
     /* ── Grid view ── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 14px;
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+    .gcard {
+      display: flex; flex-direction: column;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+      overflow: hidden; position: relative;
+      transition: border-color .15s, transform .15s;
     }
+    .gcard:hover { border-color: var(--line-2); transform: translateY(-2px); }
+    .gcard img { width: 100%; height: 140px; object-fit: cover; display: block; border-bottom: 1px solid var(--line); }
+    .gcard .in { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .gcard .post-title { font-size: 14.5px; }
+    .gcard .post-title a::before { border-radius: 14px; }
+    .gcard .post-summary { -webkit-line-clamp: 3; }
+    .gcard .avatar { width: 22px; height: 22px; border-radius: 6px; font-size: 9px; }
+    .section-label { font-size: 12px; font-weight: 600; color: var(--text-3); letter-spacing: .04em; margin: 4px 2px 10px; }
+    .section-label.gap { margin-top: 26px; }
 
     /* ── Timeline view ── */
-    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .day { margin-bottom: 22px; }
+    .day-head {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12.5px; font-weight: 700; color: var(--text-2); margin: 0 2px 8px;
+    }
+    .day-head::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+    .day-head .n { font-weight: 500; color: var(--text-3); }
+    .rows { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    .row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px; position: relative;
+      transition: background .12s;
+    }
+    .row + .row { border-top: 1px solid var(--line); }
+    .row:hover { background: var(--hover); }
+    .row .avatar { width: 26px; height: 26px; border-radius: 7px; font-size: 9.5px; }
+    .row-main { flex: 1; min-width: 0; }
+    .row-title { font-size: 14px; font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .row-title a::before { content: ''; position: absolute; inset: 0; }
+    .row-sub { font-size: 12px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .row .tag { flex: none; }
 
-    .tl-group { display: flex; gap: 0; position: relative; }
+    .more {
+      display: block; width: 100%; margin-top: 14px; padding: 10px;
+      background: var(--panel); border: 1px dashed var(--line-2); border-radius: 12px;
+      color: var(--text-2); cursor: pointer; font-size: 13px;
+    }
+    .more:hover { color: var(--text-1); border-color: var(--accent); }
+    .empty { text-align: center; padding: 80px 0; color: var(--text-3); }
+    .skeleton { height: 108px; border-radius: 14px; background: linear-gradient(90deg, var(--panel) 0%, var(--hover) 50%, var(--panel) 100%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border: 1px solid var(--line); }
+    @keyframes shimmer { to { background-position: -200% 0; } }
 
-    .tl-spine {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 60px;
-      flex-shrink: 0;
-      padding-top: 2px;
+    /* ── Right rail widgets ── */
+    .widget { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    .widget-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px 8px; font-size: 13px; font-weight: 700;
     }
-    .tl-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--cat-a);
-      box-shadow: 0 0 0 3px rgba(129,140,248,0.2);
-      flex-shrink: 0;
-      margin-top: 4px;
-    }
-    .tl-line {
-      width: 2px;
-      flex: 1;
-      background: var(--tl-line);
-      margin-top: 6px;
-      min-height: 20px;
-    }
-    .tl-group:last-child .tl-line { display: none; }
+    .widget-head .hint { font-size: 11px; font-weight: 500; color: var(--text-3); display: flex; align-items: center; gap: 5px; }
+    .hot { display: flex; align-items: flex-start; gap: 10px; padding: 7px 14px; position: relative; }
+    .hot:hover { background: var(--hover); }
+    .hot .rk { width: 18px; flex: none; font-size: 13px; font-weight: 800; color: var(--text-3); text-align: center; font-variant-numeric: tabular-nums; }
+    .hot .rk.r1 { color: #f43f5e; } .hot .rk.r2 { color: #f97316; } .hot .rk.r3 { color: #eab308; }
+    .hot .t { flex: 1; min-width: 0; font-size: 13px; line-height: 1.45; color: var(--text-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .hot:hover .t { color: var(--text-1); }
+    .hot .pts { font-size: 11px; color: var(--text-3); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .hot a::before { content: ''; position: absolute; inset: 0; }
+    .widget-foot { height: 8px; }
+    .bars { padding: 4px 14px 14px; display: flex; flex-direction: column; gap: 7px; }
+    .bar { display: grid; grid-template-columns: 64px 1fr 28px; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); }
+    .bar .track { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+    .bar .fill { height: 100%; border-radius: 3px; background: var(--grad); }
+    .bar .v { text-align: right; color: var(--text-3); font-variant-numeric: tabular-nums; }
+    .bar .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    .tl-body { flex: 1; padding-bottom: 32px; }
+    footer { text-align: center; font-size: 12px; color: var(--text-3); padding: 0 0 40px; }
+    footer b { color: var(--text-2); font-weight: 600; }
 
-    .tl-date-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-2);
-      letter-spacing: 0.04em;
-      margin-bottom: 12px;
-      padding-top: 2px;
+    /* ── 中屏：右栏并入左栏下方 ── */
+    @media (max-width: 1180px) {
+      .layout { grid-template-columns: 220px minmax(0, 1fr); grid-template-areas: "side main" "rail main"; }
+      .rail { position: static; }
+      .side { position: static; max-height: none; }
     }
-
-    .tl-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 10px;
-    }
-
-    /* ── Timeline rows ── */
-    .tl-rows { display: flex; flex-direction: column; }
-    .tl-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 9px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .tl-row:last-child { border-bottom: none; }
-    .tl-cat-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 6px;
-    }
-    .tl-dot-A { background: var(--cat-a); }
-    .tl-dot-B { background: var(--cat-b); }
-    .tl-dot-C { background: var(--cat-c); }
-    .tl-dot-D { background: var(--cat-d); }
-    .tl-dot-E { background: var(--cat-e); }
-    .tl-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-    .tl-row-title {
-      font-size: 0.87rem;
-      font-weight: 500;
-      color: var(--text-1);
-      text-decoration: none;
-      line-height: 1.45;
-      transition: color 0.12s;
-    }
-    a.tl-row-title:hover { color: var(--cat-a); }
-    .tl-row-summary {
-      font-size: 0.77rem;
-      color: var(--text-3);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .tl-row-meta {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 2px;
-    }
-    .tl-row-source { font-size: 0.68rem; color: var(--text-3); }
-
-    /* ── Card ── */
-    .card {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
-      cursor: pointer;
-    }
-    .card:hover {
-      background: var(--surface-hover);
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.35);
-    }
-    .card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-    .badge {
-      font-size: 0.67rem;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 4px;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-    }
-    .badge-A { background: rgba(129,140,248,0.14); color: var(--cat-a); }
-    .badge-B { background: rgba(34,211,238,0.12); color: var(--cat-b); }
-    .badge-C { background: rgba(52,211,153,0.12); color: var(--cat-c); }
-    .badge-D { background: rgba(251,191,36,0.12); color: var(--cat-d); }
-    .badge-E { background: rgba(248,113,113,0.12); color: var(--cat-e); }
-
-    .card-source { font-size: 0.7rem; color: var(--text-3); flex-shrink: 0; }
-    .card-title { font-size: 0.92rem; font-weight: 600; color: var(--text-1); line-height: 1.45; }
-    .card-summary {
-      font-size: 0.81rem;
-      color: var(--text-2);
-      line-height: 1.65;
-      flex: 1;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .card-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 2px;
-    }
-    .read-link { font-size: 0.75rem; color: var(--cat-a); font-weight: 500; opacity: 0.85; }
-    .card:hover .read-link { opacity: 1; }
-    .card-date { font-size: 0.7rem; color: var(--text-3); }
-
-    /* ── Empty ── */
-    .empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 80px 0;
-      color: var(--text-3);
-      font-size: 0.9rem;
-    }
-
-    /* ── Footer ── */
-    footer {
-      text-align: center;
-      font-size: 0.72rem;
-      color: var(--text-3);
-      padding: 24px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    /* ── HN 热榜 ── */
-    .hn-hot {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 0;
-    }
-    .hn-hot-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    .hn-hot-title {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #ff6600;
-      letter-spacing: 0.03em;
-    }
-    .hn-hot-sub {
-      font-size: 0.68rem;
-      color: var(--text-3);
-    }
-    .hn-hot-list {
-      columns: 2;
-      column-gap: 32px;
-    }
-    .hn-item {
-      break-inside: avoid;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 5px 0;
-      border-bottom: 1px solid rgba(34,34,58,0.7);
-      text-decoration: none;
-      min-width: 0;
-    }
-    .hn-rank {
-      font-size: 0.72rem;
-      font-weight: 700;
-      min-width: 18px;
-      text-align: center;
-      flex-shrink: 0;
-      color: var(--text-3);
-    }
-    .hn-rank-1 { color: #ef4444; }
-    .hn-rank-2 { color: #f97316; }
-    .hn-rank-3 { color: #eab308; }
-    .hn-item-title {
-      font-size: 0.79rem;
-      color: var(--text-2);
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      transition: color 0.12s;
-    }
-    .hn-item:hover .hn-item-title { color: var(--text-1); }
-    .hn-item-pts {
-      font-size: 0.66rem;
-      color: var(--text-3);
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
-
-    /* ── Card image ── */
-    .card { overflow: hidden; }
-    .card-img {
-      display: block;
-      width: calc(100% + 32px);
-      height: 148px;
-      margin: -16px -16px 12px;
-      object-fit: cover;
-    }
-
-    /* ── Feed section header ── */
-    .feed-section-head {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-2);
-      letter-spacing: 0.04em;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 12px;
-    }
-    .feed-section-gap { margin-top: 28px; }
-
-    /* ── Type badge ── */
-    .type-badge {
-      font-size: 0.62rem;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 4px;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-    }
-    .type-ai      { background: rgba(129,140,248,0.1);  color: #a5b4fc; }
-    .type-scraped { background: rgba(52,211,153,0.1);   color: #6ee7b7; }
-
-    @media (max-width: 640px) {
-      .grid { grid-template-columns: 1fr; }
-      .tl-cards { grid-template-columns: 1fr; }
-      .header-row { flex-direction: column; }
-      .tl-spine { width: 36px; }
-      .hn-hot-list { columns: 1; }
+    /* ── 手机：单栏 + 横向标签 ── */
+    @media (max-width: 820px) {
+      .topbar-inner { padding: 0 16px; gap: 10px; }
+      .logo small, .updated, .search kbd { display: none; }
+      .search { height: 34px; }
+      .toolbar { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "main" "rail"; padding: 16px 16px 48px; gap: 20px; }
+      .side { display: none; }
+      .chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px 10px; padding: 0 16px; }
+      .chips::-webkit-scrollbar { display: none; }
+      .chip {
+        flex: none; display: inline-flex; align-items: center; gap: 6px;
+        padding: 5px 12px; border-radius: 999px; font-size: 12.5px;
+        background: var(--panel); border: 1px solid var(--line); color: var(--text-2); cursor: pointer;
+      }
+      .chip.active { color: var(--text-1); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+      .toolbar h1 { font-size: 19px; }
+      .post { padding: 14px; gap: 12px; }
+      .thumb { width: 92px; height: 70px; }
+      .post-title { font-size: 15px; }
+      .post-summary { -webkit-line-clamp: 2; }
+      .row .tag { display: none; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="container">
-    <div class="header-row">
-      <div>
-        <div class="site-title">🤖 AI & 技术动态</div>
-        <div class="site-sub">AI 与互联网技术最新资讯 · 由 Claude Code 自动整理</div>
-      </div>
-      <div class="updated-badge">更新于 <span id="js-updated">—</span></div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo"><span class="logo-mark">⚡</span>TechPulse <small>AI & 技术动态</small></div>
+    <label class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="js-search" type="search" placeholder="搜索标题、摘要、来源…" autocomplete="off">
+      <kbd id="js-kbd">⌘K</kbd>
+    </label>
+    <div class="top-right">
+      <span class="updated"><span class="live-dot"></span><span class="txt">更新于</span> <span id="js-updated">—</span></span>
+      <button class="icon-btn" id="js-theme" title="切换深浅色" aria-label="切换深浅色">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
     </div>
   </div>
 </header>
 
-<div class="hn-hot" id="js-hn-strip">
-  <div class="container">
-    <div class="hn-hot-head">
-      <span class="hn-hot-title">🔥 HN 实时热榜</span>
-      <span class="hn-hot-sub" id="js-hn-sub">加载中…</span>
+<div class="layout">
+  <aside class="side">
+    <div class="nav-group">
+      <div class="nav-title">分类</div>
+      <div class="nav-list" id="js-cats"></div>
     </div>
-    <div class="hn-hot-list" id="js-hn-items"></div>
-  </div>
-</div>
+    <div class="nav-group">
+      <div class="nav-title">来源 <button class="nav-clear" id="js-src-clear" hidden>清除</button></div>
+      <div class="nav-list" id="js-srcs"></div>
+    </div>
+  </aside>
 
-<div class="filter-bar">
-  <div class="container">
-    <div class="filter-inner">
-      <div class="filter-left">
-        <div class="filter-pills" id="js-pills">
-          <button class="pill active" data-cat="ALL">全部</button>
-          <button class="pill" data-cat="A">大模型 / AI 研究</button>
-          <button class="pill" data-cat="B">AI 产品 / 工具</button>
-          <button class="pill" data-cat="C">开源社区</button>
-          <button class="pill" data-cat="D">开发技术</button>
-          <button class="pill" data-cat="E">行业动态</button>
-        </div>
+  <main class="main">
+    <div class="toolbar">
+      <div>
+        <h1><span class="grad">今日科技</span>脉搏</h1>
+        <div class="sub" id="js-count">加载中…</div>
       </div>
-      <div class="filter-right">
-        <div class="view-toggle" id="js-view-toggle">
-          <button class="view-btn active" data-view="timeline">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="2" cy="2.5" r="1.5" fill="currentColor"/><rect x="5" y="1.5" width="8" height="2" rx="1" fill="currentColor" opacity=".5"/><circle cx="2" cy="6.5" r="1.5" fill="currentColor"/><rect x="5" y="5.5" width="8" height="2" rx="1" fill="currentColor" opacity=".5"/><circle cx="2" cy="10.5" r="1.5" fill="currentColor"/><rect x="5" y="9.5" width="8" height="2" rx="1" fill="currentColor" opacity=".5"/></svg>
-            时间轴
-          </button>
-          <button class="view-btn" data-view="grid">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="0" y="0" width="5.5" height="5.5" rx="1.5" fill="currentColor" opacity=".5"/><rect x="7.5" y="0" width="5.5" height="5.5" rx="1.5" fill="currentColor" opacity=".5"/><rect x="0" y="7.5" width="5.5" height="5.5" rx="1.5" fill="currentColor" opacity=".5"/><rect x="7.5" y="7.5" width="5.5" height="5.5" rx="1.5" fill="currentColor" opacity=".5"/></svg>
-            卡片
-          </button>
-        </div>
-        <div class="count-label" id="js-count"></div>
+      <div class="seg" id="js-view">
+        <button data-view="feed" class="active" title="信息流">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor"><rect y="1" width="13" height="4" rx="1.2" opacity=".55"/><rect y="8" width="13" height="4" rx="1.2" opacity=".55"/></svg>信息流
+        </button>
+        <button data-view="timeline" title="时间轴">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor"><circle cx="2" cy="2.5" r="1.5"/><rect x="5" y="1.5" width="8" height="2" rx="1" opacity=".5"/><circle cx="2" cy="6.5" r="1.5"/><rect x="5" y="5.5" width="8" height="2" rx="1" opacity=".5"/><circle cx="2" cy="10.5" r="1.5"/><rect x="5" y="9.5" width="8" height="2" rx="1" opacity=".5"/></svg>时间轴
+        </button>
+        <button data-view="grid" title="卡片">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor" opacity=".6"><rect width="5.5" height="5.5" rx="1.5"/><rect x="7.5" width="5.5" height="5.5" rx="1.5"/><rect y="7.5" width="5.5" height="5.5" rx="1.5"/><rect x="7.5" y="7.5" width="5.5" height="5.5" rx="1.5"/></svg>卡片
+        </button>
       </div>
     </div>
-  </div>
-</div>
-
-<main class="feed">
-  <div class="container">
+    <div class="chips" id="js-chips"></div>
     <div id="js-content">
-      <div class="grid"><div class="empty">加载中…</div></div>
+      <div class="feed"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
     </div>
-  </div>
-</main>
+  </main>
 
-<footer>
-  <div class="container">
-    Powered by <strong>Claude Code</strong> · <span id="js-footer-updated"></span>
-  </div>
-</footer>
+  <aside class="rail">
+    <div class="widget" id="js-hn-widget">
+      <div class="widget-head">🔥 Hacker News 热榜 <span class="hint"><span class="live-dot"></span>实时</span></div>
+      <div id="js-hn"><div class="hot"><span class="t">加载中…</span></div></div>
+      <div class="widget-foot"></div>
+    </div>
+    <div class="widget" id="js-cn-widget" hidden>
+      <div class="widget-head">🇨🇳 国内热门 <span class="hint">36氪热榜</span></div>
+      <div id="js-cn"></div>
+      <div class="widget-foot"></div>
+    </div>
+    <div class="widget" id="js-stat-widget" hidden>
+      <div class="widget-head">📊 来源分布 <span class="hint" id="js-stat-day"></span></div>
+      <div class="bars" id="js-stats"></div>
+    </div>
+  </aside>
+</div>
+
+<footer>Powered by <b>Claude Code</b> · 每天 09:00 自动抓取 · <span id="js-footer-updated"></span></footer>
 
 <script>
 (function () {
-  const CAT = {
-    A: '大模型 / AI 研究',
-    B: 'AI 产品 / 工具',
-    C: '开源社区',
-    D: '开发技术',
-    E: '行业动态',
-  };
+  var CAT = { A: '大模型 / AI 研究', B: 'AI 产品 / 工具', C: '开源社区', D: '开发技术', E: '行业动态' };
+  var CAT_SHORT = { A: '大模型', B: 'AI 产品', C: '开源', D: '开发', E: '行业' };
 
-  let allItems = [];
-  let activeCat = 'ALL';
-  let activeView = 'timeline';
+  // 来源标识：缩写 + 品牌色
+  var SRC = {
+    '36氪':            ['36', '#1764ff'],
+    'IT之家':          ['IT', '#d0021b'],
+    '少数派':          ['π',  '#da282a'],
+    '爱范儿':          ['ifr', '#f5b400'],
+    '量子位':          ['QB', '#2a5bd7'],
+    '极客公园':        ['GP', '#00a0e9'],
+    '钛媒体':          ['Ti', '#1a1a1a'],
+    '雷峰网':          ['雷', '#e8380d'],
+    '开源中国':        ['OS', '#2fa44f'],
+    'InfoQ':           ['iQ', '#0b8ed4'],
+    'Hacker News':     ['Y',  '#ff6600'],
+    'Dev.to':          ['DEV', '#3b49df'],
+    'GitHub Trending': ['GH', '#30363d'],
+    'arXiv':           ['ar', '#b31b1b'],
+  };
+  var CN_SOURCES = ['36氪','IT之家','少数派','爱范儿','量子位','极客公园','钛媒体','雷峰网','开源中国','InfoQ'];
+
+  var allItems = [];
+  var state = { cat: 'ALL', srcs: new Set(), q: '', view: 'feed', limit: 40 };
 
   function esc(s) {
-    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
-
-  function cardHTML(item) {
-    const hasUrl   = item.url && item.url !== '#';
-    const label    = CAT[item.category] || item.category;
-    const isAI     = !item.type || item.type === 'ai';
-    const typeLabel = isAI ? 'AI精选' : '实时';
-    const typeCls   = isAI ? 'type-ai' : 'type-scraped';
-    const cat     = item.category || 'A';
-    const imgHTML = item.image_url
-      ? `<img class="card-img" src="${esc(item.image_url)}" alt="" loading="lazy" onerror="this.style.display='none'">`
-      : '';
-    return `<a class="card" ${hasUrl ? `href="${esc(item.url)}" target="_blank" rel="noopener noreferrer"` : ''}>
-  ${imgHTML}
-  <div class="card-top">
-    <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
-      <span class="badge badge-${esc(item.category)}">${esc(label)}</span>
-      <span class="type-badge ${typeCls}">${typeLabel}</span>
-    </div>
-    <span class="card-source">${esc(item.source)}</span>
-  </div>
-  <div class="card-title">${esc(item.title)}</div>
-  <div class="card-summary">${esc(item.summary)}</div>
-  <div class="card-bottom">
-    <span class="read-link">${hasUrl ? '阅读原文 →' : ''}</span>
-    <span class="card-date">${esc(item.date || '')}</span>
-  </div>
-</a>`;
+  function hashHue(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h; }
+  function avatar(source) {
+    var m = SRC[source];
+    var txt = m ? m[0] : (source || '?').slice(0, 2);
+    var bg = m ? m[1] : 'hsl(' + hashHue(source || '') + ',55%,45%)';
+    if (source === 'AI 精选' || !source) bg = 'linear-gradient(120deg,#8b7cff,#4cc9f0)';
+    return '<span class="avatar" style="background:' + bg + '">' + esc(txt) + '</span>';
   }
-
-  function timelineRowHTML(item) {
-    const hasUrl = item.url && item.url !== '#';
-    const label  = CAT[item.category] || item.category;
-    const cat    = item.category || 'A';
-    const title  = hasUrl
-      ? `<a class="tl-row-title" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">${esc(item.title)}</a>`
-      : `<span class="tl-row-title">${esc(item.title)}</span>`;
-    return `<div class="tl-row">
-  <span class="tl-cat-dot tl-dot-${esc(cat)}"></span>
-  <div class="tl-row-body">
-    ${title}
-    ${item.summary ? `<div class="tl-row-summary">${esc(item.summary)}</div>` : ''}
-    <div class="tl-row-meta">
-      <span class="badge badge-${esc(cat)}">${esc(label)}</span>
-      <span class="tl-row-source">${esc(item.source)}</span>
-    </div>
-  </div>
-</div>`;
+  function isAI(item) { return !item.type || item.type === 'ai'; }
+  function timeAgo(item) {
+    var t = item.created_at ? new Date(item.created_at) : null;
+    if (!t || isNaN(t)) return item.date || '';
+    var diff = (Date.now() - t.getTime()) / 1000;
+    if (diff < 3600) return Math.max(1, Math.round(diff / 60)) + ' 分钟前';
+    if (diff < 86400) return Math.round(diff / 3600) + ' 小时前';
+    if (diff < 86400 * 7) return Math.round(diff / 86400) + ' 天前';
+    return item.date || '';
   }
-
-  function renderGrid(items) {
-    if (!items.length) return '<div class="grid"><div class="empty">暂无内容</div></div>';
-
-    const withImg = items.filter(function(i) { return i.image_url; });
-    const noImg   = items.filter(function(i) { return !i.image_url; });
-    let html = '';
-
-    if (withImg.length) {
-      html += `<div class="feed-section-head">📸 精选封面</div>
-<div class="grid">${withImg.map(cardHTML).join('')}</div>`;
-    }
-    if (noImg.length) {
-      html += `<div class="feed-section-head feed-section-gap">📰 全部资讯</div>
-<div class="grid">${noImg.map(cardHTML).join('')}</div>`;
-    }
+  function tagHTML(item) {
+    var c = item.category || 'E';
+    var html = '<span class="tag" style="color:var(--cat-' + esc(c) + ')">' + esc(CAT_SHORT[c] || c) + '</span>';
+    if (isAI(item)) html += '<span class="tag tag-ai">✦ AI 精选</span>';
     return html;
   }
+  function link(item, inner) {
+    return item.url && item.url !== '#'
+      ? '<a href="' + esc(item.url) + '" target="_blank" rel="noopener noreferrer">' + inner + '</a>'
+      : inner;
+  }
+  function img(item, cls) {
+    return item.image_url
+      ? '<img class="' + cls + '" src="' + esc(item.image_url) + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">'
+      : '';
+  }
 
+  // ── 三种视图 ─────────────────────────────────────────────
+  function postHTML(item) {
+    return '<article class="post">' +
+      avatar(item.source) +
+      '<div class="post-body">' +
+        '<div class="post-meta"><span class="src">' + esc(item.source) + '</span><span class="sep">·</span><span>' + esc(timeAgo(item)) + '</span>' + tagHTML(item) + '</div>' +
+        '<div class="post-title">' + link(item, esc(item.title)) + '</div>' +
+        (item.summary && item.summary !== item.title ? '<div class="post-summary">' + esc(item.summary) + '</div>' : '') +
+        '<div class="post-actions">' +
+          (item.url ? '<span class="act">↗ 阅读原文</span>' : '') +
+          '<button class="act js-copy" data-url="' + esc(item.url || '') + '" data-title="' + esc(item.title) + '">⧉ 复制链接</button>' +
+        '</div>' +
+      '</div>' +
+      img(item, 'thumb') +
+    '</article>';
+  }
+  function gcardHTML(item) {
+    return '<article class="gcard">' + img(item, '') +
+      '<div class="in">' +
+        '<div class="post-meta">' + avatar(item.source) + '<span class="src">' + esc(item.source) + '</span>' + tagHTML(item) + '</div>' +
+        '<div class="post-title">' + link(item, esc(item.title)) + '</div>' +
+        (item.summary && item.summary !== item.title ? '<div class="post-summary">' + esc(item.summary) + '</div>' : '') +
+        '<div class="post-meta" style="margin-top:auto">' + esc(timeAgo(item)) + '</div>' +
+      '</div></article>';
+  }
+  function rowHTML(item) {
+    return '<div class="row">' + avatar(item.source) +
+      '<div class="row-main"><div class="row-title">' + link(item, esc(item.title)) + '</div>' +
+      '<div class="row-sub">' + esc(item.source) + (item.summary && item.summary !== item.title ? ' · ' + esc(item.summary) : '') + '</div></div>' +
+      tagHTML(item) + '</div>';
+  }
+
+  function renderFeed(items) {
+    return '<div class="feed">' + items.map(postHTML).join('') + '</div>';
+  }
+  function renderGrid(items) {
+    var withImg = items.filter(function (i) { return i.image_url; });
+    var noImg = items.filter(function (i) { return !i.image_url; });
+    var html = '';
+    if (withImg.length) html += '<div class="section-label">📸 精选封面</div><div class="grid">' + withImg.map(gcardHTML).join('') + '</div>';
+    if (noImg.length) html += '<div class="section-label' + (withImg.length ? ' gap' : '') + '">📰 全部资讯</div><div class="grid">' + noImg.map(gcardHTML).join('') + '</div>';
+    return html;
+  }
   function renderTimeline(items) {
-    if (!items.length) return '<div class="timeline"><div class="empty">暂无内容</div></div>';
-
-    const groups = {};
-    items.forEach(item => {
-      const d = item.date || '未知日期';
-      if (!groups[d]) groups[d] = [];
-      groups[d].push(item);
+    var groups = {}, order = [];
+    items.forEach(function (it) {
+      var d = it.date || '未知日期';
+      if (!groups[d]) { groups[d] = []; order.push(d); }
+      groups[d].push(it);
     });
+    return order.map(function (d) {
+      return '<div class="day"><div class="day-head">' + esc(d) + ' <span class="n">' + groups[d].length + ' 条</span></div>' +
+        '<div class="rows">' + groups[d].map(rowHTML).join('') + '</div></div>';
+    }).join('');
+  }
 
-    const dates = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+  // ── 过滤 ────────────────────────────────────────────────
+  function matchBase(it, ignore) {
+    if (ignore !== 'cat' && state.cat !== 'ALL' && it.category !== state.cat) return false;
+    if (ignore !== 'src' && state.srcs.size && !state.srcs.has(it.source)) return false;
+    if (state.q) {
+      var hay = (it.title + ' ' + (it.summary || '') + ' ' + it.source).toLowerCase();
+      if (hay.indexOf(state.q) < 0) return false;
+    }
+    return true;
+  }
+  function filtered() { return allItems.filter(function (it) { return matchBase(it); }); }
 
-    return `<div class="timeline">${dates.map(date => `
-  <div class="tl-group">
-    <div class="tl-spine">
-      <div class="tl-dot"></div>
-      <div class="tl-line"></div>
-    </div>
-    <div class="tl-body">
-      <div class="tl-date-label">${esc(date)}</div>
-      <div class="tl-rows">${groups[date].map(timelineRowHTML).join('')}</div>
-    </div>
-  </div>`).join('')}</div>`;
+  function renderNav() {
+    var catBase = allItems.filter(function (it) { return matchBase(it, 'cat'); });
+    var catCnt = { ALL: catBase.length };
+    catBase.forEach(function (it) { catCnt[it.category] = (catCnt[it.category] || 0) + 1; });
+    var cats = [['ALL', '全部', 'var(--grad)']].concat(Object.keys(CAT).map(function (k) { return [k, CAT[k], 'var(--cat-' + k + ')']; }));
+    document.getElementById('js-cats').innerHTML = cats.map(function (c) {
+      return '<button class="nav-item' + (state.cat === c[0] ? ' active' : '') + '" data-cat="' + c[0] + '">' +
+        '<span class="cat-dot" style="background:' + c[2] + '"></span><span class="label">' + esc(c[1]) + '</span><span class="cnt">' + (catCnt[c[0]] || 0) + '</span></button>';
+    }).join('');
+
+    var srcBase = allItems.filter(function (it) { return matchBase(it, 'src'); });
+    var srcCnt = {};
+    srcBase.forEach(function (it) { srcCnt[it.source] = (srcCnt[it.source] || 0) + 1; });
+    var srcs = Object.keys(srcCnt).sort(function (a, b) {
+      var ca = CN_SOURCES.indexOf(a) >= 0, cb = CN_SOURCES.indexOf(b) >= 0;
+      if (ca !== cb) return ca ? -1 : 1;
+      return srcCnt[b] - srcCnt[a];
+    });
+    document.getElementById('js-srcs').innerHTML = srcs.map(function (s) {
+      return '<button class="nav-item' + (state.srcs.has(s) ? ' active' : '') + '" data-src="' + esc(s) + '">' +
+        avatar(s) + '<span class="label">' + esc(s) + '</span><span class="cnt">' + srcCnt[s] + '</span></button>';
+    }).join('');
+    document.getElementById('js-src-clear').hidden = !state.srcs.size;
+
+    // 手机端横向标签：分类 + 来源
+    document.getElementById('js-chips').innerHTML =
+      cats.map(function (c) {
+        return '<button class="chip' + (state.cat === c[0] ? ' active' : '') + '" data-cat="' + c[0] + '">' + esc(c[0] === 'ALL' ? '全部' : CAT_SHORT[c[0]]) + '</button>';
+      }).join('') +
+      srcs.map(function (s) {
+        return '<button class="chip' + (state.srcs.has(s) ? ' active' : '') + '" data-src="' + esc(s) + '">' + esc(s) + '</button>';
+      }).join('');
   }
 
   function render() {
-    const items = activeCat === 'ALL' ? allItems : allItems.filter(i => i.category === activeCat);
-    const content = document.getElementById('js-content');
-    const count = document.getElementById('js-count');
+    var items = filtered();
+    var shown = items.slice(0, state.limit);
+    var countEl = document.getElementById('js-count');
+    var filters = [];
+    if (state.cat !== 'ALL') filters.push(CAT[state.cat]);
+    if (state.srcs.size) filters.push(Array.from(state.srcs).join('、'));
+    if (state.q) filters.push('“' + state.q + '”');
+    countEl.textContent = items.length + ' 条资讯' + (filters.length ? ' · ' + filters.join(' · ') : ' · 国内外 ' + Object.keys(SRC).length + '+ 个来源');
 
-    count.textContent = items.length + ' 条';
-    content.innerHTML = activeView === 'timeline' ? renderTimeline(items) : renderGrid(items);
+    var html;
+    if (!items.length) html = '<div class="empty">没有匹配的资讯，换个筛选试试</div>';
+    else if (state.view === 'grid') html = renderGrid(shown);
+    else if (state.view === 'timeline') html = renderTimeline(shown);
+    else html = renderFeed(shown);
+    if (items.length > shown.length) html += '<button class="more" id="js-more">加载更多（还有 ' + (items.length - shown.length) + ' 条）</button>';
+    document.getElementById('js-content').innerHTML = html;
+    renderNav();
   }
 
-  // category filter
-  document.getElementById('js-pills').addEventListener('click', function (e) {
-    const btn = e.target.closest('[data-cat]');
-    if (!btn) return;
-    activeCat = btn.dataset.cat;
-    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
+  function renderRail() {
+    // 国内热门：最近一次抓取的 36氪热榜
+    var kr = allItems.filter(function (it) { return it.source === '36氪'; });
+    if (kr.length) {
+      var day = kr[0].date;
+      kr = kr.filter(function (it) { return it.date === day; }).slice(0, 6);
+      document.getElementById('js-cn').innerHTML = kr.map(function (it, i) {
+        return '<div class="hot"><span class="rk' + (i < 3 ? ' r' + (i + 1) : '') + '">' + (i + 1) + '</span><span class="t">' + link(it, esc(it.title)) + '</span></div>';
+      }).join('');
+      document.getElementById('js-cn-widget').hidden = false;
+    }
+    // 来源分布：最新一天
+    if (allItems.length) {
+      var latest = allItems[0].date;
+      var cnt = {};
+      allItems.forEach(function (it) { if (it.date === latest) cnt[it.source] = (cnt[it.source] || 0) + 1; });
+      var arr = Object.keys(cnt).map(function (k) { return [k, cnt[k]]; }).sort(function (a, b) { return b[1] - a[1]; });
+      var max = arr.length ? arr[0][1] : 1;
+      document.getElementById('js-stats').innerHTML = arr.map(function (a) {
+        return '<div class="bar"><span class="nm">' + esc(a[0]) + '</span><span class="track"><span class="fill" style="display:block;width:' + Math.round(a[1] / max * 100) + '%"></span></span><span class="v">' + a[1] + '</span></div>';
+      }).join('');
+      document.getElementById('js-stat-day').textContent = latest;
+      document.getElementById('js-stat-widget').hidden = false;
+    }
+  }
+
+  // ── 交互 ────────────────────────────────────────────────
+  function onNavClick(e) {
+    var c = e.target.closest('[data-cat]');
+    var s = e.target.closest('[data-src]');
+    if (c) state.cat = c.dataset.cat;
+    else if (s) { var v = s.dataset.src; state.srcs.has(v) ? state.srcs.delete(v) : state.srcs.add(v); }
+    else return;
+    state.limit = 40;
+    render();
+  }
+  document.querySelector('.side').addEventListener('click', onNavClick);
+  document.getElementById('js-chips').addEventListener('click', onNavClick);
+  document.getElementById('js-src-clear').addEventListener('click', function (e) {
+    e.stopPropagation(); state.srcs.clear(); render();
+  });
+  document.getElementById('js-view').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-view]'); if (!b) return;
+    state.view = b.dataset.view;
+    document.querySelectorAll('#js-view button').forEach(function (x) { x.classList.toggle('active', x === b); });
+    try { localStorage.setItem('tp-view', state.view); } catch (err) {}
     render();
   });
-
-  // view toggle
-  document.getElementById('js-view-toggle').addEventListener('click', function (e) {
-    const btn = e.target.closest('[data-view]');
-    if (!btn) return;
-    activeView = btn.dataset.view;
-    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    render();
+  document.getElementById('js-content').addEventListener('click', function (e) {
+    if (e.target.id === 'js-more') { state.limit += 40; render(); return; }
+    var cp = e.target.closest('.js-copy');
+    if (cp && navigator.clipboard) {
+      navigator.clipboard.writeText(cp.dataset.title + ' ' + cp.dataset.url).then(function () {
+        cp.textContent = '✓ 已复制'; setTimeout(function () { cp.textContent = '⧉ 复制链接'; }, 1400);
+      });
+    }
+  });
+  var searchEl = document.getElementById('js-search');
+  var timer;
+  searchEl.addEventListener('input', function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () { state.q = searchEl.value.trim().toLowerCase(); state.limit = 40; render(); }, 120);
+  });
+  if (!/Mac|iPhone|iPad/.test(navigator.platform)) document.getElementById('js-kbd').textContent = 'Ctrl K';
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); searchEl.focus(); searchEl.select(); }
+    if (e.key === 'Escape' && document.activeElement === searchEl) { searchEl.value = ''; searchEl.dispatchEvent(new Event('input')); searchEl.blur(); }
   });
 
-  // ── HN 热榜 ────────────────────────────────────────────────────────────────
-  (function loadHNStrip() {
-    var strip = document.getElementById('js-hn-strip');
-    var list  = document.getElementById('js-hn-items');
-    var sub   = document.getElementById('js-hn-sub');
-    if (!strip || !list) return;
-    fetch('https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=10')
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        var hits = (data.hits || []).filter(function(h) { return h.title; }).slice(0, 10);
-        if (!hits.length) { strip.style.display = 'none'; return; }
-        list.innerHTML = hits.map(function(h, idx) {
-          var rank = idx + 1;
-          var url  = h.url || ('https://news.ycombinator.com/item?id=' + h.objectID);
-          var pts  = h.points ? (h.points >= 1000 ? (h.points / 1000).toFixed(1) + 'k' : h.points + '') : '';
-          var rankCls = rank <= 3 ? ' hn-rank-' + rank : '';
-          return '<a class="hn-item" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">' +
-            '<span class="hn-rank' + rankCls + '">' + rank + '</span>' +
-            '<span class="hn-item-title">' + esc(h.title) + '</span>' +
-            (pts ? '<span class="hn-item-pts">▲ ' + pts + '</span>' : '') +
-            '</a>';
-        }).join('');
-        if (sub) sub.textContent = '实时更新';
-      })
-      .catch(function() { strip.style.display = 'none'; });
-  }());
+  // 主题：默认跟随系统，手动切换后记住
+  var root = document.documentElement;
+  function applyTheme(t) { if (t === 'light') root.setAttribute('data-theme', 'light'); else root.removeAttribute('data-theme'); }
+  var saved = null;
+  try { saved = localStorage.getItem('tp-theme'); } catch (err) {}
+  applyTheme(saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+  document.getElementById('js-theme').addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    applyTheme(next);
+    try { localStorage.setItem('tp-theme', next); } catch (err) {}
+  });
+  try {
+    var v = localStorage.getItem('tp-view');
+    if (v && /^(feed|timeline|grid)$/.test(v)) {
+      state.view = v;
+      document.querySelectorAll('#js-view button').forEach(function (x) { x.classList.toggle('active', x.dataset.view === v); });
+    }
+  } catch (err) {}
 
+  // ── HN 实时热榜 ─────────────────────────────────────────
+  fetch('https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=10')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var hits = (data.hits || []).filter(function (h) { return h.title; }).slice(0, 8);
+      if (!hits.length) { document.getElementById('js-hn-widget').hidden = true; return; }
+      document.getElementById('js-hn').innerHTML = hits.map(function (h, i) {
+        var url = h.url || ('https://news.ycombinator.com/item?id=' + h.objectID);
+        var pts = h.points ? (h.points >= 1000 ? (h.points / 1000).toFixed(1) + 'k' : h.points) : '';
+        return '<div class="hot"><span class="rk' + (i < 3 ? ' r' + (i + 1) : '') + '">' + (i + 1) + '</span>' +
+          '<span class="t"><a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">' + esc(h.title) + '</a></span>' +
+          (pts ? '<span class="pts">▲ ' + pts + '</span>' : '') + '</div>';
+      }).join('');
+    })
+    .catch(function () { document.getElementById('js-hn-widget').hidden = true; });
+
+  // ── 数据 ────────────────────────────────────────────────
   var SUPABASE_URL = 'https://sqrzrvstlvxqxdxvhlxz.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcnpydnN0bHZ4cXhkeHZobHh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMTUzMjAsImV4cCI6MjA5NjU5MTMyMH0.C6Gz61TB3GhLnbDWywogGZDcqTu1G2ta9-Dyo60Yiho';
 
-  fetch(SUPABASE_URL + '/rest/v1/news_items?select=*&order=date.desc,created_at.desc&limit=200', {
+  fetch(SUPABASE_URL + '/rest/v1/news_items?select=*&order=date.desc,created_at.desc&limit=400', {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
   })
     .then(function (r) { return r.json(); })
     .then(function (rows) {
       allItems = Array.isArray(rows) ? rows : [];
+      // 旧 arXiv 摘要带 "arXiv:xxx Announce Type: new Abstract:" 前缀，展示时去掉
+      allItems.forEach(function (it) {
+        if (it.summary) it.summary = it.summary.replace(/^\s*arXiv:\S+\s+Announce Type:\s*\S+\s*Abstract:\s*/, '');
+      });
       var d = allItems.length ? allItems[0].date : '';
       document.getElementById('js-updated').textContent = d;
       document.getElementById('js-footer-updated').textContent = d ? '数据更新于 ' + d : '';
       render();
+      renderRail();
     })
     .catch(function () {
-      document.getElementById('js-content').innerHTML =
-        '<div class="grid"><div class="empty">⚠️ 数据加载失败<br><small>请检查网络或 Supabase 配置</small></div></div>';
+      document.getElementById('js-content').innerHTML = '<div class="empty">⚠️ 数据加载失败<br><small>请检查网络或 Supabase 配置</small></div>';
     });
 }());
 </script>
-
 </body>
 </html>
