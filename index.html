@@ -225,7 +225,6 @@
     }
     .tag-ai { color: var(--accent); }
     .post-title { font-size: 15.5px; font-weight: 650; line-height: 1.45; letter-spacing: -0.01em; color: var(--text-1); }
-    .post-title a::before { content: ''; position: absolute; inset: 0; border-radius: 14px; }
     .post-summary {
       font-size: 13.5px; color: var(--text-2); line-height: 1.6;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
@@ -250,7 +249,6 @@
     .gcard img { width: 100%; height: 140px; object-fit: cover; display: block; border-bottom: 1px solid var(--line); }
     .gcard .in { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
     .gcard .post-title { font-size: 14.5px; }
-    .gcard .post-title a::before { border-radius: 14px; }
     .gcard .post-summary { -webkit-line-clamp: 3; }
     .gcard .avatar { width: 22px; height: 22px; border-radius: 6px; font-size: 9px; }
     .section-label { font-size: 12px; font-weight: 600; color: var(--text-3); letter-spacing: .04em; margin: 4px 2px 10px; }
@@ -275,7 +273,6 @@
     .row .avatar { width: 26px; height: 26px; border-radius: 7px; font-size: 9.5px; }
     .row-main { flex: 1; min-width: 0; }
     .row-title { font-size: 14px; font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .row-title a::before { content: ''; position: absolute; inset: 0; }
     .row-sub { font-size: 12px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .row .tag { flex: none; }
 
@@ -303,7 +300,6 @@
     .hot .t { flex: 1; min-width: 0; font-size: 13px; line-height: 1.45; color: var(--text-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .hot:hover .t { color: var(--text-1); }
     .hot .pts { font-size: 11px; color: var(--text-3); white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .hot a::before { content: ''; position: absolute; inset: 0; }
     .widget-foot { height: 8px; }
     .bars { padding: 4px 14px 14px; display: flex; flex-direction: column; gap: 7px; }
     .bar { display: grid; grid-template-columns: 64px 1fr 28px; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); }
@@ -344,6 +340,93 @@
       .post-summary { -webkit-line-clamp: 2; }
       .row .tag { display: none; }
     }
+    /* ── 详情抽屉 + 列表页（通用组件 kit：电脑右侧滑出，手机底部升起；地址 #/item/类型/id、#/list/key） ── */
+    :root { --kit-bg: var(--bg, #0b0a10); --kit-panel: var(--panel, var(--card, rgba(255,255,255,.04))); --kit-line: var(--line, var(--sep, rgba(255,255,255,.08)));
+      --kit-line2: var(--line-2, rgba(255,255,255,.14)); --kit-t1: var(--text-1, #f1eff7); --kit-t2: var(--text-2, #a39fb3); --kit-t3: var(--text-3, #6b677a);
+      --kit-accent: var(--accent, #a3e635); --kit-hover: var(--hover, rgba(255,255,255,.05)); }
+    .kit-mask { position: fixed; inset: 0; z-index: 90; background: rgba(0,0,0,.38); display: none; }
+    .kit-mask.open { display: block; }
+    .kit-sheet { position: absolute; top: 12px; right: 12px; bottom: 12px; width: clamp(440px, 42vw, 620px); max-width: calc(100vw - 24px);
+      display: flex; flex-direction: column; overflow: hidden; color: var(--kit-t1); border-radius: 18px;
+      background: linear-gradient(var(--kit-panel), var(--kit-panel)), var(--kit-bg); box-shadow: 0 0 0 1px var(--kit-line2), 0 24px 60px rgba(0,0,0,.45);
+      animation: kit-in .24s ease-out; }
+    @keyframes kit-in { from { transform: translateX(40px); opacity: 0; } }
+    .kit-x { position: absolute; top: 12px; right: 12px; z-index: 3; width: 32px; height: 32px; border-radius: 50%; border: 0; cursor: pointer;
+      background: rgba(0,0,0,.5); color: #fff; font-size: 15px; display: grid; place-items: center; }
+    .kit-scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
+    .kit-cover { aspect-ratio: 16/9; background: var(--kit-hover) center / cover no-repeat; position: relative; }
+    .kit-cover.tall { aspect-ratio: auto; height: 280px; background-size: contain; background-color: #000; }
+    .kit-cover.ph { display: grid; place-items: center; font-size: 56px; aspect-ratio: 16/6; }
+    .kit-head { padding: 18px 20px 4px; display: flex; gap: 14px; align-items: flex-start; }
+    .kit-head .kit-thumb { flex-shrink: 0; width: 64px; height: 64px; border-radius: 14px; background: var(--kit-hover) center / cover no-repeat;
+      display: grid; place-items: center; font-size: 28px; overflow: hidden; }
+    .kit-head .kit-t { flex: 1; min-width: 0; padding-right: 30px; }
+    .kit-cover + .kit-head .kit-t { padding-right: 0; }
+    .kit-head h2 { font-size: 19px; font-weight: 800; line-height: 1.35; letter-spacing: -0.01em; }
+    .kit-sub { color: var(--kit-t2); font-size: 13px; margin-top: 4px; }
+    .kit-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .kit-tags span { font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: var(--kit-hover); color: var(--kit-t2); }
+    .kit-big { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .kit-big b { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+    .kit-body { padding: 4px 20px 20px; }
+    .kit-sec { padding-top: 16px; }
+    .kit-sec + .kit-sec { margin-top: 6px; border-top: 1px solid var(--kit-line); }
+    .kit-sec h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .kit-sec h4 small { font-size: 12px; color: var(--kit-t3); font-weight: 500; }
+    .kit-kv { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+    .kit-kv div { background: var(--kit-hover); border-radius: 10px; padding: 8px 11px; min-width: 0; }
+    .kit-kv small { display: block; font-size: 11px; color: var(--kit-t3); }
+    .kit-kv b { display: block; font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+    .kit-p { font-size: 13.5px; line-height: 1.75; color: var(--kit-t2); white-space: pre-line; }
+    .kit-rows { display: flex; flex-direction: column; }
+    .kit-row { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--kit-line); font-size: 13px; text-decoration: none; color: inherit; }
+    .kit-row:first-child { border-top: 0; }
+    .kit-row[data-kit-go], a.kit-row { cursor: pointer; }
+    .kit-row[data-kit-go]:hover .kit-rt, a.kit-row:hover .kit-rt { color: var(--kit-accent); }
+    .kit-row .kit-rt { flex: 1; min-width: 0; line-height: 1.45; }
+    .kit-row .kit-rm { color: var(--kit-t3); font-size: 12px; white-space: nowrap; }
+    .kit-row img, .kit-row .kit-ri { width: 54px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: var(--kit-hover); }
+    .kit-acts { flex-shrink: 0; display: flex; gap: 10px; padding: 12px 20px 16px; border-top: 1px solid var(--kit-line); }
+    .kit-acts a, .kit-acts button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 12px; border-radius: 11px;
+      font: inherit; font-size: 13.5px; font-weight: 700; text-decoration: none; cursor: pointer; border: 1px solid var(--kit-line2); color: var(--kit-t1); background: transparent; }
+    .kit-acts .pri { background: var(--kit-accent); border-color: var(--kit-accent); color: #111; }
+    .kit-acts a:hover, .kit-acts button:hover { filter: brightness(1.08); }
+    /* 列表页 */
+    .kit-lhead { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .kit-back { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--kit-line2); background: transparent; color: var(--kit-t1);
+      font-size: 20px; cursor: pointer; display: grid; place-items: center; flex-shrink: 0; }
+    .kit-back:hover { background: var(--kit-hover); }
+    .kit-lhead h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+    .kit-lhead small { color: var(--kit-t3); font-size: 12.5px; margin-left: 2px; }
+    .kit-lbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    .kit-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    .kit-chips a, .kit-chips button { padding: 5px 12px; border-radius: 8px; background: var(--kit-hover); color: var(--kit-t2); font: inherit; font-size: 13px;
+      font-weight: 600; white-space: nowrap; border: 0; cursor: pointer; text-decoration: none; }
+    .kit-chips .on { background: var(--kit-t1); color: var(--kit-bg); }
+    .kit-chips small { opacity: .6; margin-left: 4px; font-weight: 500; }
+    .kit-sel { padding: 6px 10px; border-radius: 9px; border: 1px solid var(--kit-line2); background: transparent; color: var(--kit-t1); font: inherit; font-size: 12.5px; font-weight: 600; }
+    .kit-sel option { background: var(--kit-bg); }
+    .kit-more { display: block; margin: 16px auto 0; padding: 9px 22px; border-radius: 10px; border: 1px solid var(--kit-line2); background: transparent;
+      color: var(--kit-t1); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .kit-more:hover { background: var(--kit-hover); }
+    .kit-morelink { font-size: 13px; font-weight: 600; color: var(--kit-t2); text-decoration: none; white-space: nowrap; cursor: pointer; }
+    .kit-morelink:hover { color: var(--kit-t1); }
+    [data-kit-item] { cursor: pointer; }
+    @media (max-width: 760px) {
+      .kit-sheet { top: auto; left: 0; right: 0; bottom: 0; width: 100%; max-width: none; height: 86vh; border-radius: 18px 18px 0 0; animation: kit-up .26s ease-out; }
+      @keyframes kit-up { from { transform: translateY(30%); opacity: .5; } }
+      .kit-head { padding: 16px 16px 4px; } .kit-body { padding: 4px 16px 18px; } .kit-acts { padding: 10px 16px 16px; }
+      .kit-cover.tall { height: 220px; }
+      .kit-head .kit-thumb { width: 46px; height: 46px; border-radius: 12px; font-size: 22px; }
+      .kit-head h2 { font-size: 17.5px; }
+      .kit-big b { font-size: 24px; }
+      .kit-lhead h2 { font-size: 19px; }
+    }
+    /* 可点开详情的元素 */
+    .post[data-kit-item], .gcard[data-kit-item], .row[data-kit-item], a.hot { cursor: pointer; }
+    .post-meta .pts { color: var(--text-2); font-variant-numeric: tabular-nums; }
+    .widget-more { display: block; padding: 6px 14px 12px; }
+    .kit-big span { color: var(--text-3); font-size: 13px; margin-right: 8px; }
   </style>
 </head>
 <body>
@@ -405,18 +488,19 @@
     <div id="js-content">
       <div class="feed"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
     </div>
+    <div id="js-list" hidden></div>
   </main>
 
   <aside class="rail">
     <div class="widget" id="js-hn-widget">
       <div class="widget-head">🔥 Hacker News 热榜 <span class="hint"><span class="live-dot"></span>实时</span></div>
       <div id="js-hn"><div class="hot"><span class="t">加载中…</span></div></div>
-      <div class="widget-foot"></div>
+      <a class="kit-morelink widget-more" href="#/list/hn">查看更多 →</a>
     </div>
     <div class="widget" id="js-cn-widget" hidden>
       <div class="widget-head">🇨🇳 国内热门 <span class="hint">36氪热榜</span></div>
       <div id="js-cn"></div>
-      <div class="widget-foot"></div>
+      <a class="kit-morelink widget-more" href="#/list/src/36%E6%B0%AA">查看更多 →</a>
     </div>
     <div class="widget" id="js-stat-widget" hidden>
       <div class="widget-head">📊 来源分布 <span class="hint" id="js-stat-day"></span></div>
@@ -428,6 +512,134 @@
 <footer>Powered by <b>Claude Code</b> · 每天 09:00 自动抓取 · <span id="js-footer-updated"></span></footer>
 
 <script>
+// ── kit：详情抽屉 + 列表页路由（各站通用，内联在页面里）──
+// 用法：
+//   KIT.item('news', id => ({ title, sub, cover, thumb, tags:[], big, body:'<div class="kit-sec">…</div>', acts:[{text, href, pri}] }))
+//   KIT.list('news', (param, query) => { … 把列表页 HTML 写进容器 … })
+//   条目元素加 data-kit-item="news/<id>" 即可点击打开详情；「查看更多」写成 <a href="#/list/news">
+//   站点首页渲染函数里先调用 KIT.route() —— 返回 true 表示当前是列表页（已渲染），首页不用再渲染
+const KIT = (() => {
+  const items = {}, lists = {};
+  let mask, homeY = 0, fromHome = 0, lastHash = location.hash, onHome = null, listBox = null;
+  const kesc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const parse = h => {
+    const m = (h === undefined ? location.hash : h).match(/^#\/(item|list)\/([^?]+?)(?:\?(.*))?$/);
+    if (!m) return null;
+    const [type, ...rest] = m[2].split('/');
+    return { kind: m[1], type: decodeURIComponent(type), id: rest.map(decodeURIComponent).join('/'), q: new URLSearchParams(m[3] || '') };
+  };
+  function ensure() {
+    if (mask) return;
+    mask = document.createElement('div');
+    mask.className = 'kit-mask';
+    mask.innerHTML = '<div class="kit-sheet" role="dialog" aria-modal="true"></div>';
+    document.body.appendChild(mask);
+    mask.addEventListener('click', e => { if (e.target === mask || e.target.closest('[data-kit-close]')) close(); });
+  }
+  function render(d) {
+    ensure();
+    const cover = d.cover ? `<div class="kit-cover ${d.coverTall ? 'tall' : ''}" style="background-image:url('${kesc(d.cover).replace(/'/g, '%27')}')"></div>`
+      : d.coverIcon ? `<div class="kit-cover ph" style="background:${d.coverBg || 'var(--kit-hover)'}">${d.coverIcon}</div>` : '';
+    const thumb = !d.cover && !d.coverIcon && (d.thumb || d.thumbIcon)
+      ? `<div class="kit-thumb" style="${d.thumb ? `background-image:url('${kesc(d.thumb).replace(/'/g, '%27')}')` : ''}${d.thumbBg ? `;background-color:${d.thumbBg}` : ''}">${d.thumb ? '' : d.thumbIcon}</div>` : '';
+    const acts = (d.acts || []).filter(a => a && (a.href || a.onclick));
+    mask.firstElementChild.innerHTML = `<button class="kit-x" data-kit-close aria-label="关闭">✕</button>
+      <div class="kit-scroll">${cover}
+        <div class="kit-head">${thumb}<div class="kit-t"><h2>${kesc(d.title)}</h2>${d.sub ? `<div class="kit-sub">${d.sub}</div>` : ''}
+          ${(d.tags || []).filter(Boolean).length ? `<div class="kit-tags">${d.tags.filter(Boolean).join('')}</div>` : ''}${d.big ? `<div class="kit-big">${d.big}</div>` : ''}</div></div>
+        <div class="kit-body">${d.body || ''}</div></div>
+      ${acts.length ? `<div class="kit-acts">${acts.map((a, i) => a.href
+        ? `<a class="${a.pri || (i === 0 && acts.length < 3) ? 'pri' : ''}" href="${kesc(a.href)}" ${a.self ? '' : 'target="_blank" rel="noopener"'}>${a.text}</a>`
+        : `<button class="${a.pri ? 'pri' : ''}" data-kit-act="${i}">${a.text}</button>`).join('')}</div>` : ''}`;
+    acts.forEach((a, i) => { if (!a.href) { const b = mask.querySelector(`[data-kit-act="${i}"]`); if (b) b.onclick = a.onclick; } });
+    mask.querySelector('.kit-scroll').scrollTop = 0;
+    mask.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  // 打开详情：写进地址（可分享；浏览器返回 = 关闭）
+  function open(key) {
+    const target = '#/item/' + key;
+    if (location.hash === target) return show(parse(target));
+    ensure();
+    if (parse()?.kind === 'item') history.replaceState(history.state, '', target);
+    else { mask.dataset.base = location.hash; history.pushState({ kit: 1 }, '', target); }
+    lastHash = target;
+    show(parse(target));
+  }
+  function show(r) {
+    const fn = items[r.type];
+    const d = fn && fn(r.id, r.q);
+    if (!d) { close(true); return false; }
+    render(d);
+    return true;
+  }
+  function close(silent) {
+    if (!mask || !mask.classList.contains('open')) return;
+    mask.classList.remove('open');
+    document.body.style.overflow = '';
+    if (!silent && parse()?.kind === 'item') {
+      if (history.state && history.state.kit) history.back();          // 从页面里点开的：退回去
+      else { history.replaceState(null, '', mask.dataset.base || location.pathname + location.search); lastHash = location.hash; }   // 直接打开的分享链接
+    }
+  }
+  // 当前地址是列表页时渲染列表页并返回 true；首页时返回 false
+  function route(box) {
+    if (box) listBox = box;
+    const r = parse();
+    if (r && r.kind === 'list' && lists[r.type]) { lists[r.type](r.id, r.q, listBox); return true; }
+    return false;
+  }
+  // 列表页的公共外壳：返回按钮 + 标题 + 子分类 + 排序
+  function shell({ title, note, chips, sort, sortVal, body, more }) {
+    return `<div class="kit-lhead"><button class="kit-back" data-kit-back title="返回">‹</button><h2>${kesc(title)}</h2>${note ? `<small>${note}</small>` : ''}</div>
+      ${chips || sort ? `<div class="kit-lbar"><div class="kit-chips">${(chips || []).map(c => `<a class="${c.on ? 'on' : ''}" href="${kesc(c.href)}">${kesc(c.text)}${c.count != null ? `<small>${c.count}</small>` : ''}</a>`).join('')}</div>
+        ${sort ? `<select class="kit-sel" data-kit-sort>${sort.map(([v, n]) => `<option value="${kesc(v)}" ${v === sortVal ? 'selected' : ''}>${kesc(n)}</option>`).join('')}</select>` : ''}</div>` : ''}
+      ${body}${more ? `<button class="kit-more" data-kit-more>${more}</button>` : ''}`;
+  }
+  function init(home) {
+    onHome = home;
+    document.addEventListener('click', e => {
+      const t = e.target.closest('[data-kit-item],[data-kit-go],[data-kit-back]');
+      if (!t) return;
+      const inner = e.target.closest('a[href],button,input,select,label,summary');   // 卡片里的其它按钮 / 链接（关注、复制…）优先
+      if (inner && inner !== t && t.contains(inner)) return;
+      e.preventDefault();
+      if (t.dataset.kitBack !== undefined) { fromHome && history.length > fromHome ? history.go(-fromHome) : (location.hash = ''); return; }
+      open(t.dataset.kitItem || t.dataset.kitGo);
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    window.addEventListener('hashchange', () => {
+      const r = parse();
+      let was = parse(lastHash), steps = 1;
+      if (was && was.kind === 'item') {                                 // 从详情离开
+        const base = mask && mask.dataset.base !== undefined ? mask.dataset.base : '';
+        if (location.hash === base) { lastHash = location.hash; close(true); return; }   // 只是关掉详情，底下页面不动
+        was = parse(base); steps = 2;                                   // 在详情里点了别的列表：按详情底下那页算，返回要退两步
+      }
+      lastHash = location.hash;
+      if (r && r.kind === 'item') { show(r); return; }
+      close(true);
+      const wasHome = !was;
+      if (r && r.kind === 'list') {
+        if (wasHome) { homeY = scrollY; fromHome = steps; }
+        onHome && onHome();
+        if (wasHome || was.type !== r.type) scrollTo(0, 0);
+      } else {
+        onHome && onHome();
+        if (fromHome) { scrollTo(0, homeY); fromHome = 0; }
+      }
+    });
+    // 直接打开带 #/item/ 的链接（比如大屏跳过来）：页面数据读完后由站点调用 KIT.boot()
+  }
+  function boot() { const r = parse(); if (r && r.kind === 'item') show(r); }
+  return { item: (t, fn) => (items[t] = fn), list: (t, fn) => (lists[t] = fn), open, close, route, shell, init, boot, parse, esc: kesc,
+    // 小工具：详情里的键值格、段落、关联列表
+    kv: rows => { const r = rows.filter(x => x && x[1] != null && x[1] !== ''); return r.length ? `<div class="kit-kv">${r.map(([k, v]) => `<div><small>${kesc(k)}</small><b title="${kesc(v)}">${kesc(v)}</b></div>`).join('')}</div>` : ''; },
+    sec: (title, html, note) => html ? `<div class="kit-sec"><h4>${title}${note ? `<small>${note}</small>` : ''}</h4>${html}</div>` : '',
+    p: t => t ? `<p class="kit-p">${kesc(t)}</p>` : '',
+  };
+})();
+
 (function () {
   var CAT = { A: '大模型 / AI 研究', B: 'AI 产品 / 工具', C: '开源社区', D: '开发技术', E: '行业动态' };
   var CAT_SHORT = { A: '大模型', B: 'AI 产品', C: '开源', D: '开发', E: '行业' };
@@ -452,6 +664,8 @@
   var CN_SOURCES = ['36氪','IT之家','少数派','爱范儿','量子位','极客公园','钛媒体','雷峰网','开源中国','InfoQ'];
 
   var allItems = [];
+  var byId = {};                      // news_items.id → 条目（首页 + 分页 + 列表页 + 单条兜底）
+  var hnHits = {}, hnFront = [];      // HN 实时热榜（objectID → hit）
   var state = { cat: 'ALL', srcs: new Set(), q: '', view: 'feed', limit: 40 };
 
   function esc(s) {
@@ -481,10 +695,28 @@
     if (isAI(item)) html += '<span class="tag tag-ai">✦ AI 精选</span>';
     return html;
   }
-  function link(item, inner) {
-    return item.url && item.url !== '#'
-      ? '<a href="' + esc(item.url) + '" target="_blank" rel="noopener noreferrer">' + inner + '</a>'
-      : inner;
+  // 抓取脚本把 HN 分数 / 评论、GitHub 星标 / 语言拼在摘要里（表里没有这些列），这里拆出来
+  function parseStats(item) {
+    var s = item.summary || '', o = { text: s };
+    var m = s.match(/^▲ (\d+) 分 · (\d+) 条评论$/);
+    if (m) { o.points = +m[1]; o.comments = +m[2]; o.text = ''; return o; }
+    m = s.match(/^([\s\S]*?)\s*｜\s*(★ [^｜]*)$/);
+    if (m) {
+      o.text = m[1];
+      m[2].split(' · ').forEach(function (p) {
+        if (/^★ /.test(p)) o.stars = p.slice(2); else if (/^今日 \+/.test(p)) o.today = p.replace(/^今日 \+/, ''); else if (p) o.lang = p;
+      });
+    }
+    return o;
+  }
+  // 展示用摘要：去掉统计后缀；与标题相同、「点击查看原文>」这类无效摘要不显示
+  function summaryOf(item) { var t = parseStats(item).text; return t && t !== item.title && !/^\s*(点击)?(查看|阅读)(原文|全文|更多)/.test(t) ? t : ''; }
+  function statsHTML(item) {
+    var o = parseStats(item), a = [];
+    if (o.points != null) a.push('▲ ' + o.points, o.comments + ' 评论');
+    if (o.stars) a.push('★ ' + o.stars);
+    if (o.lang) a.push(o.lang);
+    return a.length ? '<span class="sep">·</span><span class="pts">' + esc(a.join(' · ')) + '</span>' : '';
   }
   function img(item, cls) {
     return item.image_url
@@ -494,33 +726,36 @@
 
   // ── 三种视图 ─────────────────────────────────────────────
   function postHTML(item) {
-    return '<article class="post">' +
+    var sum = summaryOf(item);
+    return '<article class="post" data-kit-item="news/' + item.id + '">' +
       avatar(item.source) +
       '<div class="post-body">' +
-        '<div class="post-meta"><span class="src">' + esc(item.source) + '</span><span class="sep">·</span><span>' + esc(timeAgo(item)) + '</span>' + tagHTML(item) + '</div>' +
-        '<div class="post-title">' + link(item, esc(item.title)) + '</div>' +
-        (item.summary && item.summary !== item.title ? '<div class="post-summary">' + esc(item.summary) + '</div>' : '') +
-        '<div class="post-actions">' +
-          (item.url ? '<span class="act">↗ 阅读原文</span>' : '') +
-          '<button class="act js-copy" data-url="' + esc(item.url || '') + '" data-title="' + esc(item.title) + '">⧉ 复制链接</button>' +
-        '</div>' +
+        '<div class="post-meta"><span class="src">' + esc(item.source) + '</span><span class="sep">·</span><span>' + esc(timeAgo(item)) + '</span>' + statsHTML(item) + tagHTML(item) + '</div>' +
+        '<div class="post-title">' + esc(item.title) + '</div>' +
+        (sum ? '<div class="post-summary">' + esc(sum) + '</div>' : '') +
+        (item.url ? '<div class="post-actions">' +
+          '<button class="act js-copy" data-url="' + esc(item.url) + '" data-title="' + esc(item.title) + '">⧉ 复制链接</button>' +
+        '</div>' : '') +
       '</div>' +
       img(item, 'thumb') +
     '</article>';
   }
   function gcardHTML(item) {
-    return '<article class="gcard">' + img(item, '') +
+    var sum = summaryOf(item);
+    return '<article class="gcard" data-kit-item="news/' + item.id + '">' + img(item, '') +
       '<div class="in">' +
         '<div class="post-meta">' + avatar(item.source) + '<span class="src">' + esc(item.source) + '</span>' + tagHTML(item) + '</div>' +
-        '<div class="post-title">' + link(item, esc(item.title)) + '</div>' +
-        (item.summary && item.summary !== item.title ? '<div class="post-summary">' + esc(item.summary) + '</div>' : '') +
-        '<div class="post-meta" style="margin-top:auto">' + esc(timeAgo(item)) + '</div>' +
+        '<div class="post-title">' + esc(item.title) + '</div>' +
+        (sum ? '<div class="post-summary">' + esc(sum) + '</div>' : '') +
+        '<div class="post-meta" style="margin-top:auto">' + esc(timeAgo(item)) + statsHTML(item) + '</div>' +
       '</div></article>';
   }
   function rowHTML(item) {
-    return '<div class="row">' + avatar(item.source) +
-      '<div class="row-main"><div class="row-title">' + link(item, esc(item.title)) + '</div>' +
-      '<div class="row-sub">' + esc(item.source) + (item.summary && item.summary !== item.title ? ' · ' + esc(item.summary) : '') + '</div></div>' +
+    var sum = summaryOf(item), o = parseStats(item);
+    var extra = o.points != null ? '▲ ' + o.points + ' · ' + o.comments + ' 评论' : o.stars ? '★ ' + o.stars : '';
+    return '<div class="row" data-kit-item="news/' + item.id + '">' + avatar(item.source) +
+      '<div class="row-main"><div class="row-title">' + esc(item.title) + '</div>' +
+      '<div class="row-sub">' + esc(item.source) + (extra ? ' · ' + esc(extra) : '') + (sum ? ' · ' + esc(sum) : '') + '</div></div>' +
       tagHTML(item) + '</div>';
   }
 
@@ -595,6 +830,8 @@
   }
 
   function render() {
+    var r = KIT.parse();
+    if (r && r.kind === 'list') { location.hash = ''; return; }   // 列表页上改了筛选 / 搜索：回首页再渲染
     var items = filtered();
     var shown = items.slice(0, state.limit);
     var countEl = document.getElementById('js-count');
@@ -610,6 +847,7 @@
     else if (state.view === 'timeline') html = renderTimeline(shown);
     else html = renderFeed(shown);
     if (items.length > shown.length) html += '<button class="more" id="js-more">加载更多（还有 ' + (items.length - shown.length) + ' 条）</button>';
+    else if (!remoteDone) html += '<button class="more" id="js-more">' + (remoteBusy ? '加载中…' : '加载更早的资讯（已读 ' + allItems.length + ' 条）') + '</button>';
     document.getElementById('js-content').innerHTML = html;
     renderNav();
   }
@@ -621,7 +859,7 @@
       var day = kr[0].date;
       kr = kr.filter(function (it) { return it.date === day; }).slice(0, 6);
       document.getElementById('js-cn').innerHTML = kr.map(function (it, i) {
-        return '<div class="hot"><span class="rk' + (i < 3 ? ' r' + (i + 1) : '') + '">' + (i + 1) + '</span><span class="t">' + link(it, esc(it.title)) + '</span></div>';
+        return '<a class="hot" href="#/item/news/' + it.id + '" data-kit-item="news/' + it.id + '"><span class="rk' + (i < 3 ? ' r' + (i + 1) : '') + '">' + (i + 1) + '</span><span class="t">' + esc(it.title) + '</span></a>';
       }).join('');
       document.getElementById('js-cn-widget').hidden = false;
     }
@@ -663,7 +901,11 @@
     render();
   });
   document.getElementById('js-content').addEventListener('click', function (e) {
-    if (e.target.id === 'js-more') { state.limit += 40; render(); return; }
+    if (e.target.id === 'js-more') {
+      state.limit += 40;
+      if (filtered().length < state.limit) loadMoreRemote();   // 已读的 400 条用完，继续向 Supabase 分页拉
+      render(); return;
+    }
     var cp = e.target.closest('.js-copy');
     if (cp && navigator.clipboard) {
       navigator.clipboard.writeText(cp.dataset.title + ' ' + cp.dataset.url).then(function () {
@@ -705,44 +947,259 @@
   // ── HN 实时热榜 ─────────────────────────────────────────
   // 刷新时失败保留已有内容，只有首次加载失败才替换为报错
   function loadHN(isRefresh) {
-    return fetch('https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=10', { cache: 'no-store' })
+    return fetch('https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=30', { cache: 'no-store' })
       .then(function (r) { return r.json(); })
       .then(function (data) {
-        var hits = (data.hits || []).filter(function (h) { return h.title; }).slice(0, 8);
+        var hits = (data.hits || []).filter(function (h) { return h.title; });
+        hnFront = hits;
+        hits.forEach(function (h) { hnHits[h.objectID] = h; });
+        var r = KIT.parse();
+        if (r && r.kind === 'list' && r.type === 'hn') page();   // 正停在 HN 列表页：数据到了再渲染一次
+        hits = hits.slice(0, 8);
         if (!hits.length) { if (!isRefresh) document.getElementById('js-hn-widget').hidden = true; return; }
         document.getElementById('js-hn-widget').hidden = false;
         document.getElementById('js-hn').innerHTML = hits.map(function (h, i) {
-          var url = h.url || ('https://news.ycombinator.com/item?id=' + h.objectID);
           var pts = h.points ? (h.points >= 1000 ? (h.points / 1000).toFixed(1) + 'k' : h.points) : '';
-          return '<div class="hot"><span class="rk' + (i < 3 ? ' r' + (i + 1) : '') + '">' + (i + 1) + '</span>' +
-            '<span class="t"><a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">' + esc(h.title) + '</a></span>' +
-            (pts ? '<span class="pts">▲ ' + pts + '</span>' : '') + '</div>';
+          return '<a class="hot" href="#/item/hn/' + esc(h.objectID) + '" data-kit-item="hn/' + esc(h.objectID) + '"><span class="rk' + (i < 3 ? ' r' + (i + 1) : '') + '">' + (i + 1) + '</span>' +
+            '<span class="t">' + esc(h.title) + '</span>' +
+            (pts ? '<span class="pts">▲ ' + pts + '</span>' : '') + '</a>';
         }).join('');
       })
       .catch(function () { if (!isRefresh) document.getElementById('js-hn-widget').hidden = true; });
   }
 
+  // ── 详情（右侧抽屉）与列表页 ─────────────────────────────
+  // 地址：#/item/news/<news_items.id>、#/item/hn/<HN objectID>；列表 #/list/hn、#/list/src/<来源>、#/list/cat/<A-E>
+  var missing = {}, pending = {};
+  function fmtTime(iso) {
+    var t = iso ? new Date(iso) : null;
+    if (!t || isNaN(t)) return '';
+    var p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate()) + ' ' + p(t.getHours()) + ':' + p(t.getMinutes());
+  }
+  function host(url) { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (err) { return ''; } }
+  function srcIcon(source) {
+    var m = SRC[source];
+    return '<span style="color:#fff;font-weight:800;font-size:18px">' + esc(m ? m[0] : (source || '?').slice(0, 2)) + '</span>';
+  }
+  function srcBg(source) { var m = SRC[source]; return m ? m[1] : 'hsl(' + hashHue(source || '') + ',55%,45%)'; }
+  function ktag(t) { return t ? '<span>' + esc(t) + '</span>' : ''; }
+  function relRows(list) {
+    return list.length ? '<div class="kit-rows">' + list.map(function (x) {
+      return '<div class="kit-row" data-kit-go="news/' + x.id + '"><span class="kit-rt">' + esc(x.title) + '</span><span class="kit-rm">' + esc(x.source) + ' · ' + esc(timeAgo(x)) + '</span></div>';
+    }).join('') + '</div>' : '';
+  }
+  // 直接打开的分享链接，条目可能不在已读的 400 条里：按 id 单独查一次
+  function reshow(type, id) { var r = KIT.parse(); if (r && r.kind === 'item' && r.type === type && r.id === String(id)) KIT.boot(); }
+  function fetchOne(id) {
+    if (pending[id]) return;
+    pending[id] = 1;
+    sb('select=*&id=eq.' + id).then(function (r) { return r.json(); })
+      .then(function (rows) { if (Array.isArray(rows) && rows[0]) cleanRows(rows); else missing[id] = 1; })
+      .catch(function () { missing[id] = 1; })
+      .then(function () { reshow('news', id); });
+  }
+  function copyAct(title, url) {
+    return { text: '⧉ 复制链接', onclick: function () {
+      var b = this;
+      if (navigator.clipboard) navigator.clipboard.writeText(title + ' ' + url).then(function () { b.textContent = '✓ 已复制'; });
+    } };
+  }
+
+  KIT.item('news', function (id) {
+    if (!/^\d+$/.test(id)) return null;
+    var it = byId[id];
+    if (!it) {
+      if (missing[id]) return { title: '没有找到这条资讯', sub: '可能已被清理，或链接有误', thumbIcon: '⚠️' };
+      fetchOne(id);
+      return { title: '加载中…', thumbIcon: '⏳' };
+    }
+    var c = it.category || 'E', o = parseStats(it), sum = summaryOf(it);
+    var sameSrc = allItems.filter(function (x) { return x !== it && x.source === it.source; }).slice(0, 6);
+    var sameCat = allItems.filter(function (x) { return x !== it && x.category === c && x.source !== it.source; }).slice(0, 6);
+    var big = o.points != null ? '<b>▲ ' + o.points + '</b><span>分</span><b>' + o.comments + '</b><span>条评论</span>'
+      : o.stars ? '<b>★ ' + esc(o.stars) + '</b><span>星标</span>' + (o.today ? '<b>+' + esc(o.today) + '</b><span>今日新增</span>' : '') : '';
+    var acts = [];
+    if (it.url && it.url !== '#') acts.push({ text: '阅读原文 ↗', href: it.url }, copyAct(it.title, it.url));
+    return {
+      title: it.title, sub: esc(it.source) + ' · ' + esc(timeAgo(it)),
+      cover: it.image_url || '', thumbIcon: srcIcon(it.source), thumbBg: srcBg(it.source),
+      tags: [ktag(CAT_SHORT[c] || c), isAI(it) ? ktag('✦ AI 精选') : '', o.lang ? ktag(o.lang) : ''],
+      big: big,
+      body: (sum ? KIT.sec('摘要', KIT.p(sum)) : '')
+        + KIT.sec('信息', KIT.kv([['来源', it.source], ['分类', CAT[c] || c], ['日期', it.date], ['收录时间', fmtTime(it.created_at)],
+            ['语言', o.lang || ''], ['网站', host(it.url)]]))
+        + (sum ? '' : KIT.sec('说明', KIT.p('这条只抓到了标题，正文请点下方「阅读原文」。')))
+        + KIT.sec('同来源 · ' + esc(it.source), relRows(sameSrc), '<a class="kit-morelink" href="#/list/src/' + encodeURIComponent(it.source) + '">全部 →</a>')
+        + KIT.sec('同分类 · ' + esc(CAT_SHORT[c] || c), relRows(sameCat), '<a class="kit-morelink" href="#/list/cat/' + c + '">全部 →</a>'),
+      acts: acts
+    };
+  });
+
+  // HN 实时热榜条目（不在数据库里，来自 Algolia）
+  function fetchHN(id) {
+    if (pending['hn' + id]) return;
+    pending['hn' + id] = 1;
+    fetch('https://hn.algolia.com/api/v1/search?tags=story_' + encodeURIComponent(id), { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { var h = (d.hits || [])[0]; if (h) hnHits[id] = h; else missing['hn' + id] = 1; })
+      .catch(function () { missing['hn' + id] = 1; })
+      .then(function () { reshow('hn', id); });
+  }
+  KIT.item('hn', function (id) {
+    if (!/^\d+$/.test(id)) return null;
+    var h = hnHits[id];
+    if (!h) {
+      if (missing['hn' + id]) return { title: '没有找到这条 HN 帖子', thumbIcon: '⚠️' };
+      fetchHN(id);
+      return { title: '加载中…', thumbIcon: '⏳' };
+    }
+    var disc = 'https://news.ycombinator.com/item?id=' + h.objectID;
+    var rank = hnFront.indexOf(h);
+    var others = hnFront.filter(function (x) { return x !== h; }).slice(0, 8);
+    var text = h.story_text ? h.story_text.replace(/<p>/g, '\n').replace(/<[^>]+>/g, '').replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&') : '';
+    return {
+      title: h.title, sub: 'Hacker News · ' + esc(h.author || '') + ' · ' + esc(fmtTime(h.created_at)),
+      thumbIcon: srcIcon('Hacker News'), thumbBg: srcBg('Hacker News'),
+      tags: [rank >= 0 ? ktag('首页第 ' + (rank + 1) + ' 名') : '', ktag(host(h.url))],
+      big: '<b>▲ ' + (h.points || 0) + '</b><span>分</span><b>' + (h.num_comments || 0) + '</b><span>条评论</span>',
+      body: (text ? KIT.sec('正文', KIT.p(text)) : '')
+        + KIT.sec('信息', KIT.kv([['作者', h.author], ['分数', h.points], ['评论', h.num_comments], ['发布时间', fmtTime(h.created_at)], ['网站', host(h.url)]]))
+        + KIT.sec('HN 首页其它热帖', others.length ? '<div class="kit-rows">' + others.map(function (x) {
+            return '<div class="kit-row" data-kit-go="hn/' + esc(x.objectID) + '"><span class="kit-rt">' + esc(x.title) + '</span><span class="kit-rm">▲ ' + (x.points || 0) + ' · ' + (x.num_comments || 0) + ' 评论</span></div>';
+          }).join('') + '</div>' : '', '<a class="kit-morelink" href="#/list/hn">全部 →</a>'),
+      acts: [h.url ? { text: '阅读原文 ↗', href: h.url } : null, { text: 'HN 讨论 ↗', href: disc }]
+    };
+  });
+
+  // 列表页：主内容区换成列表，返回时回到首页原位置
+  var LP = 30, listN = LP, lists = {};
+  var listBox = document.getElementById('js-list');
+  function page() {
+    var isList = KIT.route(listBox);
+    listBox.hidden = !isList;
+    ['.toolbar', '#js-chips', '#js-content'].forEach(function (sel) { document.querySelector(sel).style.display = isList ? 'none' : ''; });
+    if (!isList) render();
+  }
+  // 按条件向 Supabase 分页拉（offset + limit），每个列表各自缓存
+  function remoteList(key, filter) {
+    var L = lists[key] || (lists[key] = { rows: [], total: null, done: false, busy: false });
+    if (!L.busy && !L.done && L.rows.length < listN) {
+      L.busy = true;
+      sb('select=*&' + filter + '&order=date.desc,created_at.desc&offset=' + L.rows.length + '&limit=' + (listN - L.rows.length), { 'Prefer': 'count=exact' })
+        .then(function (r) {
+          var cr = (r.headers.get('content-range') || '').split('/')[1];
+          if (cr && cr !== '*') L.total = +cr;
+          return r.json();
+        })
+        .then(function (rows) {
+          if (!Array.isArray(rows)) throw new Error('bad response');
+          L.rows = L.rows.concat(cleanRows(rows));
+          if (L.total != null ? L.rows.length >= L.total : !rows.length) L.done = true;
+        })
+        .catch(function () { L.done = true; L.err = true; })
+        .then(function () { L.busy = false; var r = KIT.parse(); if (r && r.kind === 'list') page(); });
+    }
+    return L;
+  }
+  function listBody(L) {
+    var shown = L.rows.slice(0, listN);
+    return {
+      body: shown.length ? '<div class="rows">' + shown.map(rowHTML).join('') + '</div>'
+        : '<div class="empty">' + (L.busy ? '加载中…' : L.err ? '⚠️ 加载失败，请稍后重试' : '暂无') + '</div>',
+      more: shown.length && (L.rows.length > listN || !L.done) ? (L.busy ? '加载中…' : '加载更多（' + shown.length + (L.total != null ? ' / ' + L.total : '') + '）') : ''
+    };
+  }
+  KIT.list('src', function (src, q, box) {
+    var L = remoteList('src:' + src, 'source=eq.' + encodeURIComponent(src)), b = listBody(L);
+    var names = Object.keys(SRC);
+    if (names.indexOf(src) < 0) names.push(src);
+    box.innerHTML = KIT.shell({ title: src, note: (L.total != null ? L.total + ' 条 · ' : '') + '按收录时间倒序',
+      chips: names.map(function (s) { return { text: s, href: '#/list/src/' + encodeURIComponent(s), on: s === src }; }),
+      body: b.body, more: b.more });
+  });
+  KIT.list('cat', function (c, q, box) {
+    if (!CAT[c]) c = 'A';
+    var L = remoteList('cat:' + c, 'category=eq.' + c), b = listBody(L);
+    box.innerHTML = KIT.shell({ title: CAT[c], note: (L.total != null ? L.total + ' 条 · ' : '') + '按收录时间倒序',
+      chips: Object.keys(CAT).map(function (k) { return { text: CAT_SHORT[k], href: '#/list/cat/' + k, on: k === c }; }),
+      body: b.body, more: b.more });
+  });
+  // HN 首页实时热榜（Algolia，首页约 30 条）
+  var HN_SORT = [['rank', '首页排序'], ['points', '分数最高'], ['comments', '评论最多'], ['new', '最新发布']];
+  var hnSort = 'rank';
+  KIT.list('hn', function (_, q, box) {
+    var arr = hnFront.slice();
+    if (hnSort === 'points') arr.sort(function (a, b) { return (b.points || 0) - (a.points || 0); });
+    if (hnSort === 'comments') arr.sort(function (a, b) { return (b.num_comments || 0) - (a.num_comments || 0); });
+    if (hnSort === 'new') arr.sort(function (a, b) { return (b.created_at_i || 0) - (a.created_at_i || 0); });
+    var shown = arr.slice(0, listN);
+    box.innerHTML = KIT.shell({ title: 'Hacker News 热榜', note: arr.length + ' 条 · 实时',
+      chips: [{ text: '当前首页', href: '#/list/hn', on: true }, { text: '站内收录', href: '#/list/src/' + encodeURIComponent('Hacker News') }],
+      sort: HN_SORT, sortVal: hnSort,
+      body: shown.length ? '<div class="widget">' + shown.map(function (h) {
+          var i = hnFront.indexOf(h);
+          return '<a class="hot" href="#/item/hn/' + esc(h.objectID) + '" data-kit-item="hn/' + esc(h.objectID) + '"><span class="rk' + (i < 3 ? ' r' + (i + 1) : '') + '">' + (i + 1) + '</span>' +
+            '<span class="t">' + esc(h.title) + (host(h.url) ? ' <small style="color:var(--text-3)">(' + esc(host(h.url)) + ')</small>' : '') + '</span>' +
+            '<span class="pts">▲ ' + (h.points || 0) + ' · ' + (h.num_comments || 0) + ' 评论</span></a>';
+        }).join('') + '<div class="widget-foot"></div></div>' : '<div class="empty">加载中…</div>',
+      more: arr.length > listN ? '加载更多（' + listN + ' / ' + arr.length + '）' : '' });
+  });
+  document.addEventListener('change', function (e) {
+    if (e.target.matches('[data-kit-sort]')) { hnSort = e.target.value; page(); }
+  });
+  document.addEventListener('click', function (e) { if (e.target.closest('[data-kit-more]')) { listN += LP; page(); } });
+  window.addEventListener('hashchange', function () {
+    var r = KIT.parse();
+    if (!r || r.kind !== 'item') listN = LP;
+  }, true);
+
   // ── 数据 ────────────────────────────────────────────────
   var SUPABASE_URL = 'https://sqrzrvstlvxqxdxvhlxz.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcnpydnN0bHZ4cXhkeHZobHh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMTUzMjAsImV4cCI6MjA5NjU5MTMyMH0.C6Gz61TB3GhLnbDWywogGZDcqTu1G2ta9-Dyo60Yiho';
 
-  function loadNews(isRefresh) {
-    return fetch(SUPABASE_URL + '/rest/v1/news_items?select=*&order=date.desc,created_at.desc&limit=400', {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY },
-      cache: 'no-store'
-    })
+  var PAGE = 400;          // 首页一次读 400 条，之后按 offset 继续分页
+  var remoteDone = false, remoteBusy = false;
+  function sb(query, headers) {
+    var h = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY };
+    for (var k in headers || {}) h[k] = headers[k];
+    return fetch(SUPABASE_URL + '/rest/v1/news_items?' + query, { headers: h, cache: 'no-store' });
+  }
+  // 旧 arXiv 摘要带 "arXiv:xxx Announce Type: new Abstract:" 前缀，展示时去掉；同时记进 id 索引
+  function cleanRows(rows) {
+    rows.forEach(function (it) {
+      if (it.summary) it.summary = it.summary.replace(/^\s*arXiv:\S+\s+Announce Type:\s*\S+\s*Abstract:\s*/, '');
+      byId[it.id] = it;
+    });
+    return rows;
+  }
+  function loadMoreRemote() {
+    if (remoteBusy || remoteDone) return;
+    remoteBusy = true;
+    sb('select=*&order=date.desc,created_at.desc&offset=' + allItems.length + '&limit=' + PAGE)
       .then(function (r) { return r.json(); })
       .then(function (rows) {
         if (!Array.isArray(rows)) throw new Error('bad response');
-        allItems = rows;
-        // 旧 arXiv 摘要带 "arXiv:xxx Announce Type: new Abstract:" 前缀，展示时去掉
-        allItems.forEach(function (it) {
-          if (it.summary) it.summary = it.summary.replace(/^\s*arXiv:\S+\s+Announce Type:\s*\S+\s*Abstract:\s*/, '');
-        });
+        if (rows.length < PAGE) remoteDone = true;
+        var have = {};
+        allItems.forEach(function (it) { have[it.id] = 1; });
+        allItems = allItems.concat(cleanRows(rows).filter(function (it) { return !have[it.id]; }));
+      })
+      .catch(function () {})
+      .then(function () { remoteBusy = false; var r = KIT.parse(); if (!r || r.kind === 'item') render(); });
+  }
+
+  function loadNews(isRefresh) {
+    return sb('select=*&order=date.desc,created_at.desc&limit=' + PAGE)
+      .then(function (r) { return r.json(); })
+      .then(function (rows) {
+        if (!Array.isArray(rows)) throw new Error('bad response');
+        allItems = cleanRows(rows);
+        remoteDone = rows.length < PAGE;
         var d = allItems.length ? allItems[0].date : '';
         document.getElementById('js-updated').textContent = d;
         document.getElementById('js-footer-updated').textContent = d ? '数据更新于 ' + d : '';
-        render();
+        page();
         renderRail();
         return true;
       })
@@ -752,8 +1209,9 @@
       });
   }
 
+  KIT.init(page);
   loadHN(false);
-  loadNews(false);
+  loadNews(false).then(function (ok) { if (ok) KIT.boot(); });
 
   // ── 手动刷新 ────────────────────────────────────────────
   var refreshBtn = document.getElementById('js-refresh');

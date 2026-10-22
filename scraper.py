@@ -46,11 +46,14 @@ def fetch_json(url, timeout=10):
 def clean_html(text):
     return re.sub(r"<[^>]+>", "", text or "").strip()
 
-def truncate(text, n=200):
+def truncate(text, n=500):
     text = re.sub(r"\s+", " ", clean_html(text)).strip()
     return (text[:n] + "…") if len(text) > n else text
 
 def make_item(category, title, source, summary, url, image_url=None):
+    # 摘要与标题相同等于没有摘要，置空（前端不再重复显示）
+    if (summary or "").strip() == (title or "").strip():
+        summary = ""
     return {
         "category":  category,
         "title":     title,
@@ -73,8 +76,10 @@ def fetch_hn(limit=15):
         for hit in data.get("hits", []):
             title = hit.get("title", "")
             url   = hit.get("url") or f"https://news.ycombinator.com/item?id={hit.get('objectID','')}"
+            # 表里没有分数 / 评论数列，拼成摘要（前端按「▲ N 分 · M 条评论」解析）
+            stats = f"▲ {hit.get('points') or 0} 分 · {hit.get('num_comments') or 0} 条评论"
             if title:
-                items.append(make_item(categorize(title), title, "Hacker News", title, url))
+                items.append(make_item(categorize(title), title, "Hacker News", stats, url))
     except Exception as e:
         print(f"  error: {e}")
     print(f"  {len(items)} items")
@@ -102,23 +107,33 @@ def fetch_github_trending(limit=10):
     items = []
     try:
         html  = fetch_url("https://github.com/trending?since=daily").decode("utf-8", errors="ignore")
-        # 宽泛匹配：h2 内任意位置的 /owner/repo 链接
-        slugs_raw = re.findall(r'<h2\b[^>]*>.*?href="/([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)"', html, re.DOTALL)
-        # 去重并过滤非仓库路径
-        seen, slugs = set(), []
-        for s in slugs_raw:
-            if s not in seen:
-                seen.add(s)
-                slugs.append(s)
-        descs = re.findall(r'class="[^"]*col-9[^"]*"[^>]*>\s*(.*?)\s*</p>', html, re.DOTALL)
-        for i, slug in enumerate(slugs[:limit]):
-            desc = clean_html(descs[i]) if i < len(descs) else ""
+        # 按仓库卡片切块，每块取 slug / 描述 / 星标 / 今日新增 / 语言
+        blocks = re.split(r'<article class="Box-row"[^>]*>', html)[1:]
+        seen = set()
+        for b in blocks:
+            m = re.search(r'<h2\b[^>]*>.*?href="/([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)"', b, re.DOTALL)
+            if not m or m.group(1) in seen:
+                continue
+            slug = m.group(1)
+            seen.add(slug)
+            d = re.search(r'class="[^"]*col-9[^"]*"[^>]*>\s*(.*?)\s*</p>', b, re.DOTALL)
+            desc = clean_html(d.group(1)) if d else ""
+            st = re.search(r'href="/[^"]+/stargazers"[^>]*>(.*?)</a>', b, re.DOTALL)
+            stars = clean_html(st.group(1)) if st else ""
+            td = re.search(r'([\d,]+)\s*stars today', b)
+            lang = re.search(r'itemprop="programmingLanguage">([^<]+)<', b)
+            # 表里没有 stars / language 列，拼在摘要末尾（前端按「｜ ★ …」解析）
+            extra = " · ".join(x for x in [
+                f"★ {stars}" if stars else "", f"今日 +{td.group(1)}" if td else "", lang.group(1).strip() if lang else ""] if x)
             name = slug.replace("/", " / ")
+            summary = (desc or f"GitHub 热门仓库：{name}") + (f" ｜ {extra}" if extra else "")
             items.append(make_item(
                 categorize(name, desc), name,
-                "GitHub Trending", desc or f"GitHub 热门仓库：{name}",
+                "GitHub Trending", summary,
                 f"https://github.com/{slug}"
             ))
+            if len(items) >= limit:
+                break
     except Exception as e:
         print(f"  error: {e}")
     print(f"  {len(items)} items")
