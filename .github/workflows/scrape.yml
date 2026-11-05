@@ -6,7 +6,7 @@ on:
   workflow_dispatch:       # 支持手动触发
   push:
     branches: [main]
-    paths: ['scraper.py', '.github/workflows/scrape.yml']
+    paths: ['scraper.py', '.github/workflows/scrape.yml', 'last_ai_update.txt']  # Skill 推送时间戳触发爬虫
 
 permissions:
   contents: write

@@ -42,7 +42,7 @@
 Claude Code /go-tech-news Skill（手动执行）
   ↓ WebSearch 并发 9 条检索（+ 可选关键词 1 条）→ Claude 筛选 / 去重 / A-E 分类 / 中文摘要
   ↓ Bash 内联 Python：POST Supabase news_items（type='ai'，标题重复自动跳过）
-  ↓ 写 last_ai_update.txt 并 git push（心跳，见「自动更新机制」）
+  ↓ 写 last_ai_update.txt 并 git push（触发爬虫，见「自动更新机制」）
        ↓
 GitHub Actions（每天 09:00 北京时间 / 手动 dispatch / 修改 scraper.py 或 workflow 后 push）
   ↓ python scraper.py（只用标准库）
@@ -196,9 +196,9 @@ python3 -m http.server 8000       # 浏览器打开 http://localhost:8000
 | 4. 输出报告 | 在对话里输出中文周报，每类最多 5 条，无结果的分类跳过，末尾列出覆盖来源 | |
 | 5. 写入数据库 | Bash 执行内联 Python（`urllib`），POST `/rest/v1/news_items`，`type='ai'`，`Prefer: resolution=ignore-duplicates`（标题重复自动跳过） | Supabase REST API |
 | 6. 确认结果 | 查 `news_items?select=count`（`Prefer: count=exact`），从 `content-range` 读总条数 | |
-| 7. 推送心跳 | 写 `last_ai_update.txt`（UTC 时间）→ `git commit -m "chore: trigger scraper"` → `git push` | 见下方说明 |
+| 7. 推送触发爬虫 | 写 `last_ai_update.txt`（UTC 时间）→ `git commit -m "chore: trigger scraper"` → `git push` | workflow 的 push 触发包含这个文件，约 1-2 分钟后爬虫开跑 |
 
-注意：Skill 文案说「push 后自动触发爬虫」，但 workflow 的 push 触发限定了 `paths: ['scraper.py', '.github/workflows/scrape.yml']`，只改 `last_ai_update.txt` 的 push **不会**触发爬虫；它实际起到的是保持仓库活跃的作用。需要立即跑爬虫请到 Actions 页面手动 dispatch。
+workflow 的 push 触发限定 `paths: ['scraper.py', '.github/workflows/scrape.yml', 'last_ai_update.txt']`，所以 Skill 推送时间戳会触发爬虫（2026-11-05 起；之前名单里没有这个文件，Skill 推送不会触发）。爬虫跑完提交的 `last_scrape.txt` 不在名单里，而且用 Actions 自带 token 推送的提交不会再触发 workflow，不会循环。
 
 ---
 
@@ -207,9 +207,9 @@ python3 -m http.server 8000       # 浏览器打开 http://localhost:8000
 | 触发方式 | 时机 |
 |---------|------|
 | GitHub Actions 定时任务 | `cron: '0 1 * * *'` = 每天 01:00 UTC = **09:00 北京时间**（GitHub 高峰期可能延迟几分钟到十几分钟） |
-| 修改爬虫后 push | push 到 main 且改动了 `scraper.py` 或 `.github/workflows/scrape.yml` 时，约 1-2 分钟后触发；只改 README / 心跳文件不会触发 |
+| push 到 main | 改动了 `scraper.py`、`.github/workflows/scrape.yml` 或 `last_ai_update.txt` 时，约 1-2 分钟后触发；只改 README 等其他文件不会触发 |
 | GitHub Actions 手动 dispatch | 按需触发（Actions → Daily News Scraper → Run workflow） |
-| `/go-tech-news` Skill | 手动执行，直接写入 Supabase，页面刷新即可看到 |
+| `/go-tech-news` Skill | 手动执行，AI 精选直接写入 Supabase；最后推送 `last_ai_update.txt`，顺带触发一次爬虫 |
 
 - **心跳**：workflow 每次跑完把北京时间写进 `last_scrape.txt` 并提交（`chore: scrape heartbeat …`）；Skill 每次执行写 `last_ai_update.txt` 并 push
 - **60 天停用**：仓库 60 天没有任何提交时，GitHub 会自动停用定时任务（需在 Actions 页面重新启用）。正常情况下每天的 `last_scrape.txt` 提交会让仓库保持活跃；如果定时任务已被停用，就不会再产生心跳，需要手动启用一次
